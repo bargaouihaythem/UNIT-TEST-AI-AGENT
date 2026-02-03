@@ -506,7 +506,7 @@ Le projet **UNIT TEST AI AGENT** démontre avec succès la faisabilité d'un sys
 ## 📞 Contact
 
 **Auteur :** Haythem BARGAOUI  
-**Email :** haythem.bargaoui@soprasteria.com  
+**Email :** bargaouihaythem1@gmail.com  
 **GitHub :** [github.com/bargaouihaythem](https://github.com/bargaouihaythem)
 
 ---
