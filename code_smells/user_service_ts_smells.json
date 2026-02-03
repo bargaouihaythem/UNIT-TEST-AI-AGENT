@@ -1,0 +1,39 @@
+{
+  "score": 85,
+  "quality_level": "Very Good",
+  "smells": [
+    {
+      "severity": "minor",
+      "type": "Hardcoded Configuration",
+      "line": 15,
+      "description": "URL de l'API hardcodée dans le service",
+      "code": "private apiUrl = 'https://api.example.com/users';",
+      "recommendation": "Extraire dans environment.ts"
+    },
+    {
+      "severity": "minor",
+      "type": "Simple Regex Pattern",
+      "line": 45,
+      "description": "Regex d'email trop simpliste",
+      "code": "const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;",
+      "recommendation": "Utiliser une bibliothèque de validation dédiée"
+    }
+  ],
+  "metrics": {
+    "avg_function_length": 3,
+    "max_parameters": 3,
+    "class_cohesion": 0.85
+  },
+  "strengths": [
+    "Séparation des responsabilités claire",
+    "Noms de méthodes explicites",
+    "Utilisation d'interfaces TypeScript",
+    "Injectable bien configuré",
+    "Code concis et lisible"
+  ],
+  "recommendations": [
+    "Extraire la validation d'email dans un service séparé",
+    "Créer un service de configuration pour les URLs",
+    "Ajouter des commentaires JSDoc pour les méthodes publiques"
+  ]
+}

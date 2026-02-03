@@ -1,0 +1,27 @@
+{
+  "score": 94,
+  "risk_level": "Low",
+  "vulnerabilities": [
+    {
+      "severity": "low",
+      "type": "Integer Overflow",
+      "cwe": "CWE-190",
+      "line": 47,
+      "description": "factorial() peut causer un overflow pour de grandes valeurs",
+      "code": "return n * this.factorial(n - 1);",
+      "recommendation": "Ajouter une validation pour n < 20 ou utiliser BigInt"
+    }
+  ],
+  "strengths": [
+    "Pas d'injection de code ou eval()",
+    "Validation des entrées (nombres négatifs)",
+    "Gestion appropriée des exceptions",
+    "Pas de manipulation de fichiers ou réseau",
+    "Code stateless (sans état partagé)"
+  ],
+  "recommendations": [
+    "Limiter la taille des entrées pour éviter les overflows",
+    "Ajouter des timeouts pour les calculs récursifs",
+    "Documenter les limites numériques acceptables"
+  ]
+}

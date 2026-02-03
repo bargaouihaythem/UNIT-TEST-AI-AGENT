@@ -1,0 +1,31 @@
+{
+  "score": 92,
+  "quality_level": "Excellent",
+  "smells": [
+    {
+      "severity": "minor",
+      "type": "Recursive Function",
+      "line": 47,
+      "description": "factorial() est récursif, moins lisible qu'une boucle",
+      "code": "return n * this.factorial(n - 1);",
+      "recommendation": "Envisager une version itérative plus explicite"
+    }
+  ],
+  "metrics": {
+    "avg_function_length": 4,
+    "max_parameters": 2,
+    "class_cohesion": 0.95
+  },
+  "strengths": [
+    "Service très cohésif (toutes les méthodes liées au calcul)",
+    "Fonctions courtes et focalisées",
+    "Noms de méthodes clairs et explicites",
+    "Gestion appropriée des erreurs",
+    "Injectable bien configuré"
+  ],
+  "recommendations": [
+    "Ajouter des commentaires JSDoc pour documenter les limites",
+    "Extraire les constantes magiques si présentes",
+    "Considérer split en CalculatorService et AdvancedMathService"
+  ]
+}

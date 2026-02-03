@@ -1,0 +1,33 @@
+{
+  "score": 91,
+  "issues": [
+    {
+      "severity": "medium",
+      "type": "Recursion Stack Overflow Risk",
+      "line": 47,
+      "description": "factorial() utilise la récursion sans limite, risque de stack overflow",
+      "code": "return n * this.factorial(n - 1);",
+      "recommendation": "Utiliser une approche itérative ou limiter la profondeur de récursion"
+    },
+    {
+      "severity": "low",
+      "type": "Precision Loss",
+      "line": 16,
+      "description": "Division peut perdre en précision avec des nombres très grands",
+      "code": "return a / b;",
+      "recommendation": "Documenter la précision attendue ou utiliser une bibliothèque de précision"
+    }
+  ],
+  "strengths": [
+    "Gestion des erreurs pour division par zéro",
+    "Validation des paramètres négatifs",
+    "Service Angular bien structuré",
+    "Méthodes simples et testables"
+  ],
+  "suggestions": [
+    "Remplacer la récursion de factorial() par une boucle",
+    "Ajouter des limites aux valeurs d'entrée",
+    "Documenter les limites numériques",
+    "Ajouter des tests de performance pour les grandes valeurs"
+  ]
+}

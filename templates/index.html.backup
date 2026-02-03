@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Générateur de Tests Unitaires IA - v2.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css?v=2.0" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?v=2.0">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --danger-color: #f44336;
+            --dark-bg: #1a1a2e;
+            --card-bg: #16213e;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border: none;
+            margin-bottom: 30px;
+        }
+
+        .upload-zone {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .result-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Animation pour upload zone */
+        .upload-zone {
+            transition: all 0.3s ease;
+        }
+
+        /* Effet scale sur le modal */
+        .modal.fade .modal-dialog {
+            transition: transform 0.3s ease-out;
+        }
+
+        .bug-item {
+            padding: 15px;
+            border-left: 4px solid;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+
+        .bug-critical {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .bug-warning {
+            border-left-color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .bug-info {
+            border-left-color: #17a2b8;
+            background: #f0f9ff;
+        }
+
+        .bug-code {
+            background: #2d2d2d;
+            color: #d4d4d4;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .badge-success {
+            background: var(--primary-color);
+            font-size: 1rem;
+            padding: 8px 16px;
+        }
+
+        .badge-danger {
+            background: var(--danger-color);
+            font-size: 1rem;
+            padding: 8px 16px;
+        }
+
+        .spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        #file-name {
+            margin-top: 15px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Code Scanner Styles */
+        .code-scanner-preview {
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .scanner-header {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #333;
+        }
+
+        .scanner-code-container {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #1e1e1e;
+            position: relative;
+        }
+
+        .scanner-code-container pre {
+            margin: 0;
+            padding: 20px;
+            background: transparent;
+        }
+
+        .scanner-code-container code {
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #d4d4d4;
+        }
+
+        /* Line-by-line scanning animation */
+        .scanner-line {
+            display: block;
+            padding: 2px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .scanner-line::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .scanner-line-scanning {
+            background: rgba(255, 193, 7, 0.2);
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .scanner-line-scanning::before {
+            background: #ffc107;
+            box-shadow: 0 0 10px #ffc107;
+        }
+
+        .scanner-line-complete {
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .scanner-line-complete::before {
+            content: '✓';
+            background: #28a745;
+            color: white;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { background: rgba(255, 193, 7, 0.1); }
+            50% { background: rgba(255, 193, 7, 0.3); }
+        }
+
+        @keyframes scannerGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(102, 126, 234, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.8); }
+        }
+
+        .scanner-progress {
+            animation: scannerGlow 2s ease-in-out infinite;
+        }
+
+        #scanner-progress-bar {
+            transition: width 0.3s ease;
+            font-weight: bold;
+        }
+
+        .scanner-summary {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .progress {
+            height: 30px;
+            border-radius: 15px;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea 0%, var(--primary-color) 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-code"></i> Générateur de Tests Unitaires PRO</h1>
+            <p>Générez automatiquement des tests JUnit 5 + Mockito professionnels</p>
+            <small style="opacity: 0.8;">✅ Tests corrects garantis • 🤖 Analyses IA par Ollama</small>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="stat-number"><i class="fas fa-bolt"></i> 3-5s</div>
+                    <div class="stat-label">Temps de génération</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="stat-number"><i class="fas fa-check-circle"></i> 100%</div>
+                    <div class="stat-label">Taux de succès</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="stat-number"><i class="fas fa-vial"></i> 14+</div>
+                    <div class="stat-label">Tests par fichier</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="stat-number"><i class="fas fa-brain"></i> IA+</div>
+                    <div class="stat-label">Analyse IA</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Card -->
+        <div class="card">
+            <div class="card-body p-5">
+                <h3 class="text-center mb-4"><i class="fas fa-upload"></i> Uploadez votre fichier (Python, TypeScript, Java)</h3>
+                
+                <!-- Info Badge -->
+                <div class="alert alert-info text-center mb-4">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Vous pouvez uploader N'IMPORTE QUEL fichier de votre ordinateur !</strong><br>
+                    <small>✅ Fichiers Python (.py) • TypeScript (.ts) • Java (.java) • De n'importe quel projet externe</small>
+                </div>
+                
+                <div class="upload-zone" id="upload-zone">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <h4>Glissez-déposez votre fichier ici</h4>
+                    <p class="text-muted">ou cliquez pour parcourir</p>
+                    <input type="file" id="file-input" accept=".py,.ts,.java" style="display: none;">
+                    <div id="file-name"></div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button class="btn btn-generate" id="generate-btn" disabled>
+                        <i class="fas fa-magic"></i> Générer les Tests (Mockito + JUnit)
+                    </button>
+                    <button class="btn btn-danger ms-3" id="reset-btn" style="display: none;">
+                        <i class="fas fa-redo"></i> Nouveau Fichier
+                    </button>
+                </div>
+
+                <!-- Spinner -->
+                <div class="spinner" id="spinner">
+                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                    <p class="mt-3"><strong>Génération en cours...</strong></p>
+                    <p class="text-muted">L'IA analyse votre code et génère des tests</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de confirmation Reset -->
+        <div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="resetModalLabel">
+                            <i class="fas fa-redo"></i> Réinitialiser l'analyse
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+                        </div>
+                        <p class="text-center mb-3">
+                            <strong>Voulez-vous vraiment réinitialiser ?</strong>
+                        </p>
+                        <p class="text-muted text-center">
+                            Toutes les analyses du fichier actuel seront effacées.<br>
+                            Vous pourrez ensuite uploader un nouveau fichier.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> Annuler
+                        </button>
+                        <button type="button" class="btn btn-danger" id="confirm-reset-btn">
+                            <i class="fas fa-check"></i> Oui, Réinitialiser
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Container -->
+        <div class="result-container" id="result-container">
+            <!-- Stats Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-chart-line"></i> Résultats</h4>
+                    <div class="row text-center mt-4">
+                        <div class="col-md-4">
+                            <h2 class="text-primary" id="total-tests">0</h2>
+                            <p>Tests générés</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="text-success" id="passed-tests">0</h2>
+                            <p>Tests réussis</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="text-danger" id="failed-tests">0</h2>
+                            <p>Tests échoués</p>
+                        </div>
+                    </div>
+                    <div class="progress mt-4">
+                        <div class="progress-bar" role="progressbar" id="success-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Analysis Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-microscope"></i> Analyse du Code Source</h4>
+                    <div class="row text-center mt-3">
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stat-number" id="source-lines">0</div>
+                                <div class="stat-label">Lignes de code</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stat-number" id="source-functions">0</div>
+                                <div class="stat-label">Fonctions détectées</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stat-number" id="source-classes">0</div>
+                                <div class="stat-label">Classes détectées</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stat-number" id="coverage-ratio">0</div>
+                                <div class="stat-label">Tests / Fonction</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Scanner Animation Card -->
+            <div class="card" id="code-scanner-card" style="display: none;">
+                <div class="card-body">
+                    <h4><i class="fas fa-robot"></i> 🤖 IA en action : Scan du code en cours...</h4>
+                    
+                    <!-- Progress Section -->
+                    <div class="scanner-progress mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span id="scanner-status">Initialisation du scan...</span>
+                            <span id="scanner-percentage">0%</span>
+                        </div>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                 role="progressbar" 
+                                 id="scanner-progress-bar" 
+                                 style="width: 0%"
+                                 aria-valuenow="0" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                <span id="scanner-progress-text">Démarrage...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Code Preview with Line-by-Line Scan -->
+                    <div class="code-scanner-preview">
+                        <div class="scanner-header bg-dark text-white p-2 rounded-top">
+                            <i class="fas fa-code"></i> <span id="scanner-filename">code.py</span>
+                            <span class="float-end text-success" id="scanner-line-info">Ligne 0/0</span>
+                        </div>
+                        <div class="scanner-code-container" id="scanner-code-container">
+                            <pre><code id="scanner-code-content" class="language-python"></code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Scan Summary -->
+                    <div class="scanner-summary mt-3 p-3 bg-light rounded" style="display: none;" id="scanner-summary">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <div class="text-success">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                    <p class="mb-0 mt-2"><strong id="scanner-lines-scanned">0</strong> lignes scannées</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-info">
+                                    <i class="fas fa-function fa-2x"></i>
+                                    <p class="mb-0 mt-2"><strong id="scanner-functions-found">0</strong> fonctions trouvées</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-warning">
+                                    <i class="fas fa-cubes fa-2x"></i>
+                                    <p class="mb-0 mt-2"><strong id="scanner-classes-found">0</strong> classes trouvées</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-primary">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                    <p class="mb-0 mt-2"><strong id="scanner-duration">0.0</strong>s de scan</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Source Code Card -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4><i class="fas fa-file-code"></i> Code Source Analysé</h4>
+                        <button class="btn btn-gradient-primary btn-sm" onclick="improveCodeWithAI()" id="improveBtn">
+                            <i class="fas fa-magic"></i> ✨ Improve Code with AI
+                        </button>
+                    </div>
+                    <pre class="code-block" id="source-code"></pre>
+                </div>
+            </div>
+
+            <!-- Modal Code Amélioré -->
+            <div class="modal fade" id="improvedCodeModal" tabindex="-1">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content" style="background: #1a1a2e; color: white;">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title"><i class="fas fa-magic text-warning"></i> Code Amélioré par IA Ollama</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-robot"></i> L'IA Ollama a analysé et amélioré votre code :
+                                <ul class="mt-2 mb-0">
+                                    <li>Correction de bugs</li>
+                                    <li>Optimisation des performances</li>
+                                    <li>Amélioration de la lisibilité</li>
+                                    <li>Renforcement de la sécurité</li>
+                                </ul>
+                            </div>
+                            <pre class="code-block" id="improved-code-content" style="max-height: 500px; overflow-y: auto;"></pre>
+                        </div>
+                        <div class="modal-footer border-secondary">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="button" class="btn btn-success" onclick="copyImprovedCode()">
+                                <i class="fas fa-copy"></i> Copier le Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🏆 AI CONFIDENCE SCORE - Niveau Entreprise -->
+            <div class="card border-primary">
+                <div class="card-body">
+                    <h4><i class="fas fa-brain"></i> 🎯 AI Confidence Score <span class="badge bg-gradient-primary">PRO</span></h4>
+                    <div class="row mt-3">
+                        <div class="col-md-3 text-center">
+                            <div class="display-3 text-primary" id="confidence-percentage">0%</div>
+                            <p class="text-muted fw-bold">Confidence</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="h3 text-info" id="service-type">-</div>
+                            <p class="text-muted">Service Type</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="h3 text-warning" id="complexity-level">-</div>
+                            <p class="text-muted">Complexity</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="h3 text-success" id="test-strategy">-</div>
+                            <p class="text-muted">Strategy</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h6><i class="fas fa-info-circle text-primary"></i> AI Reasoning</h6>
+                        <ul id="confidence-reasoning" class="list-unstyled ms-3"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Bug Detector Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-bug"></i> 🔍 Smart Bug Detector <span class="badge bg-primary">IA</span></h4>
+                    <div class="row mt-3">
+                        <div class="col-md-4 text-center">
+                            <div class="display-4" id="bug-score">0</div>
+                            <p class="text-muted">Score de Fiabilité</p>
+                            <div class="progress mt-2">
+                                <div class="progress-bar bg-success" id="bug-score-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="display-4" id="bug-count">0</div>
+                            <p class="text-muted">Problèmes Détectés</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="display-4" id="strength-count">0</div>
+                            <p class="text-muted">Points Forts</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4" id="bugs-container"></div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-check-circle text-success"></i> Points Forts</h5>
+                            <ul id="strengths-list" class="list-unstyled"></ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-lightbulb text-warning"></i> Suggestions</h5>
+                            <ul id="improvements-list" class="list-unstyled"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Coverage Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-shield-alt"></i> Couverture des Tests Générés</h4>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-check-circle text-success me-3" style="font-size: 2rem;"></i>
+                                <div>
+                                    <h5 class="mb-0" id="happy-path-count">0</h5>
+                                    <small class="text-muted">Happy Path Tests</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-exclamation-triangle text-warning me-3" style="font-size: 2rem;"></i>
+                                <div>
+                                    <h5 class="mb-0" id="edge-case-count">0</h5>
+                                    <small class="text-muted">Edge Cases</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-times-circle text-danger me-3" style="font-size: 2rem;"></i>
+                                <div>
+                                    <h5 class="mb-0" id="error-case-count">0</h5>
+                                    <small class="text-muted">Error Handling</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info mt-3" id="coverage-summary">
+                        <i class="fas fa-info-circle"></i> <strong>Analyse de couverture :</strong>
+                        <span id="coverage-text">En attente d'analyse...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Complexity Analyzer Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-chart-line"></i> 📊 Test Complexity Analyzer <span class="badge bg-primary">IA</span></h4>
+                    <div class="row mt-3">
+                        <div class="col-md-3 text-center">
+                            <div class="display-4" id="complexity-score">0</div>
+                            <p class="text-muted">Score Global</p>
+                            <div class="progress mt-2">
+                                <div class="progress-bar" id="complexity-score-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4 text-info" id="cyclomatic-complexity">0</div>
+                            <p class="text-muted">Complexité Cyclomatique</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4 text-success" id="maintainability-score">0</div>
+                            <p class="text-muted">Maintenabilité</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4 text-warning" id="duplication-rate">0%</div>
+                            <p class="text-muted">Duplication</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-chart-bar text-primary"></i> Métriques Détaillées</h6>
+                            <ul id="metrics-list" class="list-unstyled"></ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-star text-warning"></i> Indicateurs Qualité</h6>
+                            <div id="quality-indicators"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-check-circle text-success"></i> Points Forts</h6>
+                            <ul id="complexity-strengths" class="list-unstyled"></ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-lightbulb text-info"></i> Opportunités d'Amélioration</h6>
+                            <ul id="complexity-opportunities" class="list-unstyled"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Scanner Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-shield-alt"></i> 🔒 Security Vulnerability Scanner <span class="badge bg-danger">IA</span></h4>
+                    <div class="row mt-3">
+                        <div class="col-md-3 text-center">
+                            <div class="display-4" id="security-score">0</div>
+                            <p class="text-muted">Score de Sécurité</p>
+                            <div class="progress mt-2">
+                                <div class="progress-bar" id="security-score-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4 text-danger" id="vulnerabilities-count">0</div>
+                            <p class="text-muted">Vulnérabilités</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4" id="security-risk-level">Low</div>
+                            <p class="text-muted">Niveau de Risque</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4 text-success" id="security-strengths-count">0</div>
+                            <p class="text-muted">Points Sécurisés</p>
+                        </div>
+                    </div>
+                    <div class="mt-4" id="vulnerabilities-container"></div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-check-circle text-success"></i> Points Forts Sécurité</h6>
+                            <ul id="security-strengths-list" class="list-unstyled"></ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-lightbulb text-warning"></i> Recommandations Sécurité</h6>
+                            <ul id="security-recommendations-list" class="list-unstyled"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coverage Predictor Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-chart-area"></i> 📈 Code Coverage Predictor <span class="badge bg-info">IA</span></h4>
+                    <div class="row mt-3">
+                        <div class="col-md-4 text-center">
+                            <div class="display-4" id="coverage-predictor-score">0</div>
+                            <p class="text-muted">Score de Couverture</p>
+                            <div class="progress mt-2">
+                                <div class="progress-bar bg-info" id="coverage-predictor-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="display-4 text-info" id="estimated-coverage">0%</div>
+                            <p class="text-muted">Couverture Estimée</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="display-4 text-warning" id="uncovered-lines-count">0</div>
+                            <p class="text-muted">Lignes Non Couvertes</p>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-times text-danger"></i> Tests Manquants</h6>
+                            <ul id="missing-tests-list" class="list-unstyled"></ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-check text-success"></i> Points Forts Couverture</h6>
+                            <ul id="coverage-strengths-list" class="list-unstyled"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Analyzer Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-tachometer-alt"></i> ⚡ Performance Bottleneck Analyzer <span class="badge bg-warning">IA</span></h4>
+                    <div class="row mt-3">
+                        <div class="col-md-3 text-center">
+                            <div class="display-4" id="performance-score">0</div>
+                            <p class="text-muted">Score Performance</p>
+                            <div class="progress mt-2">
+                                <div class="progress-bar bg-warning" id="performance-score-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4" id="performance-level">Good</div>
+                            <p class="text-muted">Niveau</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4 text-danger" id="bottlenecks-count">0</div>
+                            <p class="text-muted">Bottlenecks</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4 text-info" id="time-complexity">O(1)</div>
+                            <p class="text-muted">Complexité</p>
+                        </div>
+                    </div>
+                    <div class="mt-4" id="bottlenecks-container"></div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-check-circle text-success"></i> Points Forts Performance</h6>
+                            <ul id="performance-strengths-list" class="list-unstyled"></ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-lightbulb text-info"></i> Recommandations Performance</h6>
+                            <ul id="performance-recommendations-list" class="list-unstyled"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Smells Detector Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-nose"></i> 👃 Code Smell Detector <span class="badge bg-secondary">IA</span></h4>
+                    <div class="row mt-3">
+                        <div class="col-md-3 text-center">
+                            <div class="display-4" id="code-quality-score">0</div>
+                            <p class="text-muted">Score Qualité</p>
+                            <div class="progress mt-2">
+                                <div class="progress-bar" id="code-quality-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4" id="quality-level">Good</div>
+                            <p class="text-muted">Niveau Qualité</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4 text-warning" id="smells-count">0</div>
+                            <p class="text-muted">Code Smells</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="display-4 text-info" id="avg-function-length">0</div>
+                            <p class="text-muted">Lignes/Fonction</p>
+                        </div>
+                    </div>
+                    <div class="mt-4" id="code-smells-container"></div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-check-circle text-success"></i> Points Forts Qualité</h6>
+                            <ul id="code-quality-strengths-list" class="list-unstyled"></ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-lightbulb text-warning"></i> Recommandations Qualité</h6>
+                            <ul id="code-quality-recommendations-list" class="list-unstyled"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Code Card -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4><i class="fas fa-code"></i> Code des Tests Générés</h4>
+                        <button class="btn btn-success" id="download-btn">
+                            <i class="fas fa-download"></i> Télécharger
+                        </button>
+                    </div>
+                    <pre class="code-block" id="test-code"></pre>
+                </div>
+            </div>
+
+            <!-- Pytest Output Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h4><i class="fas fa-terminal"></i> Sortie Pytest</h4>
+                    <pre class="code-block" id="pytest-output"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="row mt-5">
+            <div class="col-md-4 text-center text-white">
+                <i class="fas fa-magic feature-icon"></i>
+                <h5>Double Analyse IA</h5>
+                <p>Analyse le code source ET la qualité des tests générés</p>
+            </div>
+            <div class="col-md-4 text-center text-white">
+                <i class="fas fa-check-double feature-icon"></i>
+                <h5>Tests Complets</h5>
+                <p>Couvre le happy path, edge cases et erreurs</p>
+            </div>
+            <div class="col-md-4 text-center text-white">
+                <i class="fas fa-rocket feature-icon"></i>
+                <h5>Ultra Rapide</h5>
+                <p>Génération en 3-5 secondes</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const uploadZone = document.getElementById('upload-zone');
+        const fileInput = document.getElementById('file-input');
+        const generateBtn = document.getElementById('generate-btn');
+        const fileName = document.getElementById('file-name');
+        const spinner = document.getElementById('spinner');
+        const resultContainer = document.getElementById('result-container');
+        let selectedFile = null;
+
+        // Analyze source code function
+        function analyzeSourceCode(sourceCode) {
+            if (!sourceCode) return;
+
+            const lines = sourceCode.split('\n').filter(line => line.trim()).length;
+            
+            // Détecter les méthodes selon le langage
+            let functionMatches = [];
+            if (sourceCode.includes('@Override') || sourceCode.includes('public class')) {
+                // Java - détecter avec @Override
+                functionMatches = sourceCode.match(/(?:@Override\s+)?(?:public|private|protected)\s+\w+\s+\w+\s*\(/g) || [];
+            } else if (sourceCode.includes('def ')) {
+                // Python
+                functionMatches = sourceCode.match(/def\s+\w+\s*\(/g) || [];
+            } else {
+                // TypeScript/JavaScript
+                functionMatches = sourceCode.match(/(?:function\s+\w+|const\s+\w+\s*=\s*\(|public\s+\w+\s*\()/g) || [];
+            }
+            
+            const classMatches = sourceCode.match(/class\s+\w+/g) || [];
+            
+            document.getElementById('source-lines').textContent = lines;
+            document.getElementById('source-functions').textContent = functionMatches.length;
+            document.getElementById('source-classes').textContent = classMatches.length;
+            
+            const total = parseInt(document.getElementById('total-tests').textContent) || 0;
+            const ratio = functionMatches.length > 0 ? (total / functionMatches.length).toFixed(1) : 0;
+            document.getElementById('coverage-ratio').textContent = ratio;
+        }
+
+        // Analyze test coverage function - V2 CORRECTION
+        function analyzeTestCoverage(testCode) {
+            if (!testCode) return;
+
+            // Count different test patterns - AMÉLIORATION pour Java/TypeScript/Python
+            // Java/Mockito: .thenReturn() = happy path, .thenThrow() = error
+            // Edge cases: null parameters, WithNullInput
+            const happyPath = (testCode.match(/\.thenReturn\(/g) || []).length;
+            const errorCases = (testCode.match(/\.thenThrow\(/g) || []).length;
+            const edgeCases = (testCode.match(/WithNullInput|null,|, null|\(null/g) || []).length;
+
+            // Fallback Python patterns si pas Java
+            if (happyPath === 0 && errorCases === 0) {
+                const pythonHappy = (testCode.match(/test_\w*(valid|success|correct|normal|basic|simple)/gi) || []).length;
+                const pythonEdge = (testCode.match(/test_\w*(edge|boundary|empty|zero|max|min|large|small)/gi) || []).length;
+                const pythonError = (testCode.match(/test_\w*(error|invalid|exception|fail|negative|none|null)/gi) || []).length;
+                
+                document.getElementById('happy-path-count').textContent = pythonHappy;
+                document.getElementById('edge-case-count').textContent = pythonEdge;
+                document.getElementById('error-case-count').textContent = pythonError;
+            } else {
+                // Java/TypeScript
+                document.getElementById('happy-path-count').textContent = happyPath;
+                document.getElementById('edge-case-count').textContent = Math.max(edgeCases, 0);
+                document.getElementById('error-case-count').textContent = errorCases;
+            }
+
+            const total = happyPath + edgeCases + errorCases;
+            let coverageText = '';
+            
+            if (total > 0) {
+                const happyPercent = Math.round((happyPath / total) * 100);
+                const edgePercent = Math.round((edgeCases / total) * 100);
+                const errorPercent = Math.round((errorCases / total) * 100);
+                
+                coverageText = `Couverture équilibrée avec ${happyPercent}% de tests fonctionnels, `;
+                coverageText += `${edgePercent}% de cas limites et ${errorPercent}% de gestion d'erreurs.`;
+            } else {
+                coverageText = 'Tous les types de tests ont été générés automatiquement par l\'IA.';
+            }
+            
+            document.getElementById('coverage-text').textContent = coverageText;
+        }
+
+        // 🏆 Display AI Confidence Score - NIVEAU ENTREPRISE
+        function displayConfidenceScore(confidenceData) {
+            if (!confidenceData) return;
+            
+            // Afficher confidence %
+            const confidenceEl = document.getElementById('confidence-percentage');
+            if (confidenceEl) {
+                confidenceEl.textContent = confidenceData.confidence + '%';
+                confidenceEl.className = confidenceData.confidence >= 90 ? 'display-3 text-success' : 
+                                         confidenceData.confidence >= 75 ? 'display-3 text-primary' : 'display-3 text-warning';
+            }
+            
+            // Service type
+            const serviceTypeEl = document.getElementById('service-type');
+            if (serviceTypeEl) {
+                serviceTypeEl.textContent = confidenceData.service_type || 'Unknown';
+            }
+            
+            // Complexity
+            const complexityEl = document.getElementById('complexity-level');
+            if (complexityEl) {
+                complexityEl.textContent = confidenceData.business_logic_complexity || 'Low';
+            }
+            
+            // Test strategy
+            const strategyEl = document.getElementById('test-strategy');
+            if (strategyEl) {
+                const strategy = confidenceData.delegation_detected ? 'Delegation' : 'Business Logic';
+                strategyEl.textContent = strategy;
+            }
+            
+            // AI Reasoning
+            const reasoningList = document.getElementById('confidence-reasoning');
+            if (reasoningList && confidenceData.reasoning) {
+                reasoningList.innerHTML = '';
+                confidenceData.reasoning.forEach(reason => {
+                    reasoningList.innerHTML += `<li><i class="fas fa-check-circle text-success me-2"></i>${reason}</li>`;
+                });
+            }
+        }
+
+        // Display bug analysis function
+        function displayBugAnalysis(bugData) {
+            if (!bugData) return;
+
+            // Update score avec protection
+            const scoreElement = document.getElementById('bug-score');
+            const scoreBarElement = document.getElementById('bug-score-bar');
+            if (!scoreElement || !scoreBarElement) {
+                console.warn('Bug analysis elements not found in DOM');
+                return;
+            }
+            
+            const score = bugData.score || 0;
+            scoreElement.textContent = score;
+            scoreBarElement.style.width = score + '%';
+            
+            // Color score bar
+            if (score >= 90) {
+                scoreBarElement.className = 'progress-bar bg-success';
+            } else if (score >= 75) {
+                scoreBarElement.className = 'progress-bar bg-info';
+            } else if (score >= 60) {
+                scoreBarElement.className = 'progress-bar bg-warning';
+            } else {
+                scoreBarElement.className = 'progress-bar bg-danger';
+            }
+
+            // Update counts avec protection
+            const bugCountElement = document.getElementById('bug-count');
+            const strengthCountElement = document.getElementById('strength-count');
+            if (bugCountElement) bugCountElement.textContent = (bugData.bugs || []).length;
+            if (strengthCountElement) strengthCountElement.textContent = (bugData.strengths || []).length;
+
+            // Display bugs avec protection
+            const bugsContainer = document.getElementById('bugs-container');
+            if (bugsContainer) {
+                bugsContainer.innerHTML = '';
+                
+                if (bugData.bugs && bugData.bugs.length > 0) {
+                    bugData.bugs.forEach(bug => {
+                        const severityIcon = {
+                            'critical': '🔴',
+                            'high': '🔴',
+                            'medium': '⚠️',
+                            'low': '💡',
+                            'warning': '⚠️',
+                            'info': '💡'
+                        };
+                        
+                        const bugHtml = `
+                            <div class="bug-item bug-${bug.severity}">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h6>${severityIcon[bug.severity] || '🔍'} ${bug.type.toUpperCase()}</h6>
+                                    <span class="badge bg-secondary">Ligne ${bug.line}</span>
+                                </div>
+                                <p class="mb-2">${bug.description || bug.message || 'Problème détecté'}</p>
+                                <div class="bug-code">${bug.code}</div>
+                                <p class="mt-2 mb-0"><strong>💡 Solution:</strong> ${bug.recommendation || bug.suggestion || 'Voir la documentation'}</p>
+                            </div>
+                        `;
+                        bugsContainer.innerHTML += bugHtml;
+                    });
+                } else {
+                    bugsContainer.innerHTML = '<p class="text-muted">Aucun problème critique détecté.</p>';
+                }
+            }
+
+            // Display strengths avec protection
+            const strengthsList = document.getElementById('strengths-list');
+            if (strengthsList && bugData.strengths && bugData.strengths.length > 0) {
+                strengthsList.innerHTML = '';
+                bugData.strengths.forEach(strength => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `✅ ${strength}`;
+                    li.className = 'mb-2';
+                    strengthsList.appendChild(li);
+                });
+            }
+            
+            // Display improvements avec protection
+            const improvementsList = document.getElementById('improvements-list');
+            if (improvementsList && bugData.improvements && bugData.improvements.length > 0) {
+                improvementsList.innerHTML = '';
+                bugData.improvements.forEach(improvement => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `💡 ${improvement}`;
+                    li.className = 'mb-2';
+                    improvementsList.appendChild(li);
+                });
+            }
+        }
+
+        // Display test complexity analysis function
+        function displayTestComplexity(complexityData) {
+            if (!complexityData) return;
+            
+            // Vérifier que les éléments existent
+            const scoreElement = document.getElementById('complexity-score');
+            const scoreBarElement = document.getElementById('complexity-score-bar');
+            if (!scoreElement || !scoreBarElement) {
+                console.warn('Test Complexity elements not found in DOM');
+                return;
+            }
+            
+            // Update score
+            scoreElement.textContent = complexityData.score;
+            scoreBarElement.style.width = complexityData.score + '%';
+            
+            // Color the score bar
+            if (complexityData.score >= 90) {
+                scoreBarElement.className = 'progress-bar bg-success';
+            } else if (complexityData.score >= 80) {
+                scoreBarElement.className = 'progress-bar bg-info';
+            } else if (complexityData.score >= 70) {
+                scoreBarElement.className = 'progress-bar bg-warning';
+            } else {
+                scoreBarElement.className = 'progress-bar bg-danger';
+            }
+            
+            // Update metrics - avec protection
+            const cyclomaticEl = document.getElementById('cyclomatic-complexity');
+            const maintainabilityEl = document.getElementById('maintainability-score');
+            const duplicationEl = document.getElementById('duplication-rate');
+            
+            if (cyclomaticEl && complexityData.complexity) {
+                cyclomaticEl.textContent = complexityData.complexity.cyclomatic.toFixed(1);
+            }
+            if (maintainabilityEl && complexityData.complexity) {
+                maintainabilityEl.textContent = complexityData.complexity.maintainability;
+            }
+            if (duplicationEl && complexityData.metrics) {
+                const duplication = complexityData.metrics.duplication_percentage || complexityData.metrics.duplication_rate || 0;
+                duplicationEl.textContent = duplication + '%';
+            }
+            
+            // Display detailed metrics
+            const metricsList = document.getElementById('metrics-list');
+            if (metricsList && complexityData.metrics && complexityData.complexity) {
+                metricsList.innerHTML = `
+                    <li><i class="fas fa-vial text-primary"></i> <strong>${complexityData.metrics.total_tests}</strong> tests au total</li>
+                    <li><i class="fas fa-code text-info"></i> Moyenne <strong>${complexityData.metrics.avg_lines_per_test}</strong> lignes par test</li>
+                    <li><i class="fas fa-check-double text-success"></i> <strong>${complexityData.metrics.avg_assertions_per_test}</strong> assertions par test</li>
+                    <li><i class="fas fa-brain text-warning"></i> Complexité cognitive: <strong>${complexityData.complexity.cognitive.toFixed(1)}</strong></li>
+                `;
+            }
+            
+            // Display quality indicators
+            const qualityIndicators = document.getElementById('quality-indicators');
+            if (qualityIndicators && complexityData.quality_indicators) {
+                qualityIndicators.innerHTML = '';
+                for (const [key, value] of Object.entries(complexityData.quality_indicators)) {
+                    const badgeClass = value.toLowerCase() === 'exceptionnelle' ? 'success' :
+                                     value.toLowerCase() === 'très bonne' ? 'info' :
+                                     value.toLowerCase() === 'bonne' ? 'primary' : 'warning';
+                    const indicator = document.createElement('div');
+                    indicator.className = 'mb-2';
+                    indicator.innerHTML = `
+                        <span class="badge bg-${badgeClass}">${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}</span>
+                    `;
+                    qualityIndicators.appendChild(indicator);
+                }
+            }
+            
+            // Display strengths
+            const strengthsList = document.getElementById('complexity-strengths');
+            if (strengthsList && complexityData.strengths) {
+                strengthsList.innerHTML = '';
+                complexityData.strengths.forEach(strength => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check text-success"></i> ${strength}`;
+                    strengthsList.appendChild(li);
+                });
+            }
+            
+            // Display opportunities
+            const opportunitiesList = document.getElementById('complexity-opportunities');
+            if (opportunitiesList && complexityData.opportunities) {
+                opportunitiesList.innerHTML = '';
+                complexityData.opportunities.forEach(opportunity => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-arrow-up text-info"></i> ${opportunity}`;
+                    opportunitiesList.appendChild(li);
+                });
+            }
+        }
+
+        // Display security analysis function
+        function displaySecurityAnalysis(securityData) {
+            if (!securityData) return;
+            
+            const scoreEl = document.getElementById('security-score');
+            const scoreBarEl = document.getElementById('security-score-bar');
+            if (!scoreEl || !scoreBarEl) return;
+            
+            scoreEl.textContent = securityData.score;
+            scoreBarEl.style.width = securityData.score + '%';
+            
+            if (securityData.score >= 90) {
+                scoreBarEl.className = 'progress-bar bg-success';
+            } else if (securityData.score >= 70) {
+                scoreBarEl.className = 'progress-bar bg-warning';
+            } else {
+                scoreBarEl.className = 'progress-bar bg-danger';
+            }
+            
+            const vulnCountEl = document.getElementById('vulnerabilities-count');
+            const riskLevelEl = document.getElementById('security-risk-level');
+            const strengthsCountEl = document.getElementById('security-strengths-count');
+            
+            if (vulnCountEl) vulnCountEl.textContent = (securityData.vulnerabilities || []).length;
+            if (riskLevelEl) riskLevelEl.textContent = securityData.risk_level || 'Low';
+            if (strengthsCountEl) strengthsCountEl.textContent = (securityData.strengths || []).length;
+            
+            const vulnContainer = document.getElementById('vulnerabilities-container');
+            if (vulnContainer && securityData.vulnerabilities && securityData.vulnerabilities.length > 0) {
+                vulnContainer.innerHTML = '';
+                securityData.vulnerabilities.forEach(vuln => {
+                    const severityClass = vuln.severity === 'critical' ? 'danger' : vuln.severity === 'medium' ? 'warning' : 'info';
+                    const severityIcon = vuln.severity === 'critical' ? '🔴' : vuln.severity === 'medium' ? '🟡' : 'ℹ️';
+                    vulnContainer.innerHTML += `
+                        <div class="alert alert-${severityClass}">
+                            <h6>${severityIcon} ${vuln.type} (${vuln.cwe || 'CWE-Unknown'})</h6>
+                            <p><strong>Ligne ${vuln.line}:</strong> ${vuln.description}</p>
+                            <code>${vuln.code}</code>
+                            <p class="mt-2 mb-0"><strong>💡 Recommandation:</strong> ${vuln.recommendation}</p>
+                        </div>
+                    `;
+                });
+            }
+            
+            const strengthsList = document.getElementById('security-strengths-list');
+            if (strengthsList && securityData.strengths) {
+                strengthsList.innerHTML = '';
+                securityData.strengths.forEach(strength => {
+                    strengthsList.innerHTML += `<li><i class="fas fa-check text-success"></i> ${strength}</li>`;
+                });
+            }
+            
+            const recommendationsList = document.getElementById('security-recommendations-list');
+            if (recommendationsList && securityData.recommendations) {
+                recommendationsList.innerHTML = '';
+                securityData.recommendations.forEach(rec => {
+                    recommendationsList.innerHTML += `<li><i class="fas fa-arrow-right text-warning"></i> ${rec}</li>`;
+                });
+            }
+        }
+
+        // Display coverage prediction function
+        function displayCoveragePrediction(coverageData) {
+            if (!coverageData) return;
+            
+            const scoreEl = document.getElementById('coverage-predictor-score');
+            const barEl = document.getElementById('coverage-predictor-bar');
+            if (scoreEl) scoreEl.textContent = coverageData.coverage_score || 0;
+            if (barEl) barEl.style.width = (coverageData.coverage_score || 0) + '%';
+            
+            // ✅ CORRECTION V2 : Afficher couverture estimée
+            const estimatedCoverageEl = document.getElementById('estimated-coverage');
+            if (estimatedCoverageEl && coverageData.estimated_coverage !== undefined) {
+                estimatedCoverageEl.textContent = coverageData.estimated_coverage + '%';
+            }
+            
+            // ✅ Afficher nombre de lignes non couvertes
+            const uncoveredCountEl = document.getElementById('uncovered-lines-count');
+            if (uncoveredCountEl) {
+                const uncoveredCount = coverageData.uncovered_lines ? coverageData.uncovered_lines.length : 0;
+                uncoveredCountEl.textContent = uncoveredCount;
+            }
+            
+            const uncoveredContainer = document.getElementById('uncovered-lines-container');
+            if (uncoveredContainer && coverageData.uncovered_lines) {
+                uncoveredContainer.innerHTML = '';
+                coverageData.uncovered_lines.forEach(line => {
+                    uncoveredContainer.innerHTML += `<li>Ligne ${line}</li>`;
+                });
+            }
+            
+            // ✅ CORRECTION V2 : Afficher listes missing tests et strengths
+            const missingTestsList = document.getElementById('missing-tests-list');
+            if (missingTestsList && coverageData.missing_tests) {
+                missingTestsList.innerHTML = '';
+                coverageData.missing_tests.forEach(test => {
+                    missingTestsList.innerHTML += `<li><i class="fas fa-minus-circle text-danger"></i> ${test}</li>`;
+                });
+            }
+            
+            const strengthsList = document.getElementById('coverage-strengths-list');
+            if (strengthsList && coverageData.strengths) {
+                strengthsList.innerHTML = '';
+                coverageData.strengths.forEach(strength => {
+                    strengthsList.innerHTML += `<li><i class="fas fa-check-circle text-success"></i> ${strength}</li>`;
+                });
+            }
+            
+            const missingContainer = document.getElementById('missing-tests-container');
+            if (missingContainer && coverageData.missing_tests) {
+                missingContainer.innerHTML = '';
+                coverageData.missing_tests.forEach(test => {
+                    missingContainer.innerHTML += `<li>${test}</li>`;
+                });
+            }
+        }
+
+        // Code Scanner Animation Function
+        async function startCodeScanner(sourceCode, filename, stats) {
+            return new Promise((resolve) => {
+                // Show scanner card
+                const scannerCard = document.getElementById('code-scanner-card');
+                scannerCard.style.display = 'block';
+                scannerCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Update filename
+                document.getElementById('scanner-filename').textContent = filename;
+
+                // Prepare code lines
+                const lines = sourceCode.split('\n');
+                const totalLines = lines.length;
+
+                // Detect language for syntax highlighting
+                let language = 'python';
+                if (filename.endsWith('.ts')) language = 'typescript';
+                else if (filename.endsWith('.java')) language = 'java';
+
+                // Simple syntax highlighting patterns
+                const highlightCode = (code, lang) => {
+                    let highlighted = code
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+
+                    if (lang === 'python') {
+                        highlighted = highlighted
+                            .replace(/\b(def|class|import|from|return|if|else|elif|for|while|try|except|with|as|pass|break|continue|True|False|None)\b/g, '<span style="color:#569CD6">$1</span>')
+                            .replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>')
+                            .replace(/(#.*$)/gm, '<span style="color:#6A9955">$1</span>')
+                            .replace(/(['"])(.*?)\1/g, '<span style="color:#CE9178">$1$2$1</span>')
+                            .replace(/\b([A-Za-z_][A-Za-z0-9_]*)\s*\(/g, '<span style="color:#DCDCAA">$1</span>(');
+                    } else if (lang === 'typescript') {
+                        highlighted = highlighted
+                            .replace(/\b(function|const|let|var|return|if|else|for|while|class|interface|export|import|from|async|await|try|catch|throw|new|this|super|extends|implements)\b/g, '<span style="color:#569CD6">$1</span>')
+                            .replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>')
+                            .replace(/(\/\/.*$)/gm, '<span style="color:#6A9955">$1</span>')
+                            .replace(/(['"`])(.*?)\1/g, '<span style="color:#CE9178">$1$2$1</span>')
+                            .replace(/\b([A-Za-z_][A-Za-z0-9_]*)\s*\(/g, '<span style="color:#DCDCAA">$1</span>(');
+                    } else if (lang === 'java') {
+                        highlighted = highlighted
+                            .replace(/\b(public|private|protected|static|final|void|class|interface|extends|implements|import|return|if|else|for|while|try|catch|throw|new|this|super)\b/g, '<span style="color:#569CD6">$1</span>')
+                            .replace(/\b(int|String|boolean|double|float|long|char|byte|short)\b/g, '<span style="color:#4EC9B0">$1</span>')
+                            .replace(/\b(\d+)\b/g, '<span style="color:#B5CEA8">$1</span>')
+                            .replace(/(\/\/.*$)/gm, '<span style="color:#6A9955">$1</span>')
+                            .replace(/(['"])(.*?)\1/g, '<span style="color:#CE9178">$1$2$1</span>')
+                            .replace(/\b([A-Z][A-Za-z0-9_]*)\b/g, '<span style="color:#4EC9B0">$1</span>');
+                    }
+
+                    return highlighted;
+                };
+
+                // Create wrapped lines with IDs
+                const wrappedLines = lines.map((line, idx) => 
+                    `<span class="scanner-line" id="scanner-line-${idx}">${highlightCode(line || ' ', language)}</span>`
+                ).join('\n');
+
+                // Display code
+                const codeContainer = document.getElementById('scanner-code-content');
+                codeContainer.innerHTML = wrappedLines;
+
+                // Scanning states
+                const states = [
+                    { progress: 15, status: 'Analyse des imports et dépendances...', text: 'Imports' },
+                    { progress: 30, status: 'Détection des fonctions et méthodes...', text: 'Fonctions' },
+                    { progress: 50, status: 'Vérification de la structure du code...', text: 'Structure' },
+                    { progress: 70, status: 'Analyse de la complexité...', text: 'Complexité' },
+                    { progress: 85, status: 'Recherche de bugs potentiels...', text: 'Bugs' },
+                    { progress: 95, status: 'Analyse de sécurité...', text: 'Sécurité' },
+                    { progress: 100, status: '✅ Scan terminé !', text: 'Terminé' }
+                ];
+
+                let currentState = 0;
+                let currentLine = 0;
+                const startTime = Date.now();
+
+                // Animation parameters
+                const linesPerSecond = totalLines / 2.5; // Complete in 2.5 seconds
+                const msPerLine = 1000 / linesPerSecond;
+                const stateInterval = 2500 / states.length;
+
+                // Update progress states
+                const stateTimer = setInterval(() => {
+                    if (currentState < states.length) {
+                        const state = states[currentState];
+                        document.getElementById('scanner-status').textContent = state.status;
+                        document.getElementById('scanner-percentage').textContent = state.progress + '%';
+                        document.getElementById('scanner-progress-bar').style.width = state.progress + '%';
+                        document.getElementById('scanner-progress-text').textContent = state.text;
+                        currentState++;
+                    }
+                }, stateInterval);
+
+                // Animate line by line
+                const lineTimer = setInterval(() => {
+                    if (currentLine < totalLines) {
+                        // Update line info
+                        document.getElementById('scanner-line-info').textContent = `Ligne ${currentLine + 1}/${totalLines}`;
+
+                        const lineEl = document.getElementById(`scanner-line-${currentLine}`);
+                        if (lineEl) {
+                            // Mark previous line as complete
+                            if (currentLine > 0) {
+                                const prevLine = document.getElementById(`scanner-line-${currentLine - 1}`);
+                                if (prevLine) {
+                                    prevLine.classList.remove('scanner-line-scanning');
+                                    prevLine.classList.add('scanner-line-complete');
+                                }
+                            }
+
+                            // Mark current line as scanning
+                            lineEl.classList.add('scanner-line-scanning');
+                            
+                            // Scroll to current line
+                            lineEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+
+                        currentLine++;
+                    } else {
+                        // Complete last line
+                        const lastLine = document.getElementById(`scanner-line-${totalLines - 1}`);
+                        if (lastLine) {
+                            lastLine.classList.remove('scanner-line-scanning');
+                            lastLine.classList.add('scanner-line-complete');
+                        }
+
+                        clearInterval(lineTimer);
+                        clearInterval(stateTimer);
+
+                        // Show summary
+                        const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+                        document.getElementById('scanner-lines-scanned').textContent = totalLines;
+                        document.getElementById('scanner-functions-found').textContent = stats.functions || 0;
+                        document.getElementById('scanner-classes-found').textContent = stats.classes || 0;
+                        document.getElementById('scanner-duration').textContent = duration;
+                        document.getElementById('scanner-summary').style.display = 'block';
+
+                        // Wait a moment then hide scanner
+                        setTimeout(() => {
+                            scannerCard.style.display = 'none';
+                            resolve();
+                        }, 1500);
+                    }
+                }, msPerLine);
+            });
+        }
+
+        // Display performance analysis function
+        function displayPerformanceAnalysis(perfData) {
+            if (!perfData) return;
+            
+            const scoreEl = document.getElementById('performance-score');
+            const barEl = document.getElementById('performance-score-bar');
+            if (scoreEl) scoreEl.textContent = perfData.score || 0;
+            if (barEl) barEl.style.width = (perfData.score || 0) + '%';
+            
+            const levelEl = document.getElementById('performance-level');
+            if (levelEl) levelEl.textContent = perfData.performance_level || 'Good';
+            
+            const bottlenecksCountEl = document.getElementById('bottlenecks-count');
+            if (bottlenecksCountEl) bottlenecksCountEl.textContent = (perfData.bottlenecks || []).length;
+            
+            const complexityEl = document.getElementById('time-complexity');
+            if (complexityEl && perfData.metrics) complexityEl.textContent = perfData.metrics.time_complexity || 'O(1)';
+            
+            const bottlenecksContainer = document.getElementById('bottlenecks-container');
+            if (bottlenecksContainer && perfData.bottlenecks && perfData.bottlenecks.length > 0) {
+                bottlenecksContainer.innerHTML = '';
+                perfData.bottlenecks.forEach(bottleneck => {
+                    const severityClass = bottleneck.severity === 'high' ? 'danger' : bottleneck.severity === 'medium' ? 'warning' : 'info';
+                    bottlenecksContainer.innerHTML += `
+                        <div class="alert alert-${severityClass}">
+                            <h6>⚠️ ${bottleneck.type}</h6>
+                            <p><strong>Ligne ${bottleneck.line}:</strong> ${bottleneck.description}</p>
+                            <code>${bottleneck.code}</code>
+                            <p class="mt-2 mb-0"><strong>💡 Recommandation:</strong> ${bottleneck.recommendation}</p>
+                        </div>
+                    `;
+                });
+            }
+            
+            const strengthsList = document.getElementById('performance-strengths-list');
+            if (strengthsList && perfData.strengths) {
+                strengthsList.innerHTML = '';
+                perfData.strengths.forEach(strength => {
+                    strengthsList.innerHTML += `<li><i class="fas fa-check text-success"></i> ${strength}</li>`;
+                });
+            }
+            
+            const recommendationsList = document.getElementById('performance-recommendations-list');
+            if (recommendationsList && perfData.recommendations) {
+                recommendationsList.innerHTML = '';
+                perfData.recommendations.forEach(rec => {
+                    recommendationsList.innerHTML += `<li><i class="fas fa-arrow-right text-info"></i> ${rec}</li>`;
+                });
+            }
+        }
+
+        // Display code smells function
+        function displayCodeSmells(smellsData) {
+            if (!smellsData) return;
+            
+            const scoreEl = document.getElementById('code-quality-score');
+            const barEl = document.getElementById('code-quality-bar');
+            if (scoreEl) scoreEl.textContent = smellsData.score || 0;
+            if (barEl) {
+                barEl.style.width = (smellsData.score || 0) + '%';
+                if (smellsData.score >= 90) {
+                    barEl.className = 'progress-bar bg-success';
+                } else if (smellsData.score >= 70) {
+                    barEl.className = 'progress-bar bg-info';
+                } else {
+                    barEl.className = 'progress-bar bg-warning';
+                }
+            }
+            
+            const levelEl = document.getElementById('quality-level');
+            if (levelEl) levelEl.textContent = smellsData.quality_level || 'Good';
+            
+            const smellsCountEl = document.getElementById('smells-count');
+            if (smellsCountEl) smellsCountEl.textContent = (smellsData.smells || []).length;
+            
+            const avgFuncLengthEl = document.getElementById('avg-function-length');
+            if (avgFuncLengthEl && smellsData.metrics) avgFuncLengthEl.textContent = smellsData.metrics.avg_function_length || 0;
+            
+            const smellsContainer = document.getElementById('code-smells-container');
+            if (smellsContainer && smellsData.smells && smellsData.smells.length > 0) {
+                smellsContainer.innerHTML = '';
+                smellsData.smells.forEach(smell => {
+                    const severityClass = smell.severity === 'major' ? 'danger' : smell.severity === 'medium' ? 'warning' : 'info';
+                    smellsContainer.innerHTML += `
+                        <div class="alert alert-${severityClass}">
+                            <h6>👃 ${smell.type}</h6>
+                            <p><strong>Ligne ${smell.line}:</strong> ${smell.description}</p>
+                            <code>${smell.code}</code>
+                            <p class="mt-2 mb-0"><strong>💡 Recommandation:</strong> ${smell.recommendation}</p>
+                        </div>
+                    `;
+                });
+            }
+            
+            const strengthsList = document.getElementById('code-quality-strengths-list');
+            if (strengthsList && smellsData.strengths) {
+                strengthsList.innerHTML = '';
+                smellsData.strengths.forEach(strength => {
+                    strengthsList.innerHTML += `<li><i class="fas fa-check text-success"></i> ${strength}</li>`;
+                });
+            }
+            
+            const recommendationsList = document.getElementById('code-quality-recommendations-list');
+            if (recommendationsList && smellsData.recommendations) {
+                recommendationsList.innerHTML = '';
+                smellsData.recommendations.forEach(rec => {
+                    recommendationsList.innerHTML += `<li><i class="fas fa-arrow-right text-warning"></i> ${rec}</li>`;
+                });
+            }
+        }
+
+        // Click to upload
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        // File selection
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                fileName.textContent = `📄 ${selectedFile.name}`;
+                generateBtn.disabled = false;
+            }
+        });
+
+        // Drag and drop
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                const validExtensions = ['.py', '.ts', '.java'];
+                const isValid = validExtensions.some(ext => file.name.endsWith(ext));
+                
+                if (isValid) {
+                    selectedFile = file;
+                    fileInput.files = e.dataTransfer.files;
+                    fileName.textContent = `📄 ${selectedFile.name}`;
+                    generateBtn.disabled = false;
+                } else {
+                    alert('Veuillez sélectionner un fichier Python (.py), TypeScript (.ts) ou Java (.java)');
+                }
+            }
+        });
+
+        // Generate button avec IA
+        generateBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+
+            // Show spinner
+            spinner.style.display = 'block';
+            generateBtn.disabled = true;
+            resultContainer.style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // START CODE SCANNER ANIMATION FIRST
+                    const stats = {
+                        functions: 0,
+                        classes: 0
+                    };
+
+                    // Count functions and classes from source
+                    const sourceCode = data.source_content || '';
+                    const lines = sourceCode.split('\n');
+                    lines.forEach(line => {
+                        if (/\b(def|function|public\s+\w+|private\s+\w+)\s+\w+\s*\(/.test(line)) {
+                            stats.functions++;
+                        }
+                        if (/\b(class|interface)\s+\w+/.test(line)) {
+                            stats.classes++;
+                        }
+                    });
+
+                    // Run scanner animation BEFORE showing results
+                    await startCodeScanner(sourceCode, selectedFile.name, stats);
+
+                    // NOW update stats and display results
+                    document.getElementById('total-tests').textContent = data.stats.total;
+                    document.getElementById('passed-tests').textContent = data.stats.passed;
+                    document.getElementById('failed-tests').textContent = data.stats.failed;
+                    
+                    const successRate = (data.stats.passed / data.stats.total * 100) || 0;
+                    document.getElementById('success-bar').style.width = successRate + '%';
+
+                    // Analyze source code
+                    analyzeSourceCode(data.source_content || '');
+                    document.getElementById('source-code').textContent = data.source_content || 'Code source non disponible';
+                    
+                    // Sauvegarder le code source pour la fonction Improve Code
+                    currentSourceCode = data.source_content || '';
+                    currentLanguage = data.filename.endsWith('.java') ? 'java' : 
+                                     data.filename.endsWith('.ts') ? 'typescript' : 
+                                     data.filename.endsWith('.py') ? 'python' : 'java';
+
+                    // Analyze test coverage
+                    analyzeTestCoverage(data.test_content);
+
+                    // 🏆 Display AI Confidence Score FIRST (most important for jury)
+                    if (data.confidence_score) {
+                        displayConfidenceScore(data.confidence_score);
+                    }
+
+                    // Display bug analysis
+                    if (data.bug_analysis) {
+                        displayBugAnalysis(data.bug_analysis);
+                    }
+
+                    // Display test complexity analysis
+                    if (data.test_complexity) {
+                        displayTestComplexity(data.test_complexity);
+                    }
+
+                    // Display security analysis
+                    if (data.security_analysis) {
+                        displaySecurityAnalysis(data.security_analysis);
+                    }
+
+                    // Display coverage prediction
+                    if (data.coverage_prediction) {
+                        displayCoveragePrediction(data.coverage_prediction);
+                    }
+
+                    // Display performance analysis
+                    if (data.performance_analysis) {
+                        displayPerformanceAnalysis(data.performance_analysis);
+                    }
+
+                    // Display code smells
+                    if (data.code_smells) {
+                        displayCodeSmells(data.code_smells);
+                    }
+
+                    // Show code
+                    document.getElementById('test-code').textContent = data.test_content;
+                    document.getElementById('pytest-output').textContent = data.pytest_output;
+
+                    // Setup download button
+                    document.getElementById('download-btn').onclick = () => {
+                        window.location.href = `/download/${data.test_filename}`;
+                    };
+
+                    // Show results
+                    resultContainer.style.display = 'block';
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Masquer le bouton "Générer" et afficher "Nouveau Fichier"
+                    generateBtn.style.display = 'none';
+                    document.getElementById('reset-btn').style.display = 'inline-block';
+                    
+                    // Désactiver la zone d'upload
+                    uploadZone.style.opacity = '0.6';
+                    uploadZone.style.pointerEvents = 'none';
+                    uploadZone.style.cursor = 'not-allowed';
+                } else {
+                    alert('Erreur: ' + (data.error || 'Erreur inconnue'));
+                }
+            } catch (error) {
+                alert('Erreur de connexion: ' + error.message);
+            } finally {
+                spinner.style.display = 'none';
+                generateBtn.disabled = false;
+            }
+        });
+
+        // Reset button - Pour tester un nouveau fichier
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            // Afficher le modal de confirmation
+            const resetModal = new bootstrap.Modal(document.getElementById('resetModal'));
+            resetModal.show();
+        });
+
+        // Confirmation du reset depuis le modal
+        document.getElementById('confirm-reset-btn').addEventListener('click', () => {
+            // Fermer le modal
+            const resetModal = bootstrap.Modal.getInstance(document.getElementById('resetModal'));
+            resetModal.hide();
+            
+            // Réinitialiser le formulaire
+            selectedFile = null;
+            fileInput.value = '';
+            fileName.textContent = '';
+            generateBtn.disabled = true;
+            
+            // Réafficher le bouton Générer et masquer Reset
+            generateBtn.style.display = 'inline-block';
+            document.getElementById('reset-btn').style.display = 'none';
+            
+            // Réactiver la zone d'upload
+            uploadZone.style.opacity = '1';
+            uploadZone.style.pointerEvents = 'auto';
+            uploadZone.style.cursor = 'pointer';
+            
+            // Masquer les résultats
+            resultContainer.style.display = 'none';
+            document.getElementById('code-scanner-card').style.display = 'none';
+            
+            // Scroller vers le haut avec animation
+            setTimeout(() => {
+                uploadZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Animation de confirmation
+                uploadZone.style.transform = 'scale(1.05)';
+                uploadZone.style.border = '3px solid #28a745';
+                uploadZone.style.boxShadow = '0 0 20px rgba(40, 167, 69, 0.5)';
+                
+                setTimeout(() => {
+                    uploadZone.style.transform = 'scale(1)';
+                    uploadZone.style.border = '2px dashed #667eea';
+                    uploadZone.style.boxShadow = 'none';
+                }, 800);
+            }, 300);
+        });
+
+        // ✨ NOUVELLE FONCTION: Améliorer le code avec IA Ollama
+        let currentSourceCode = '';
+        let currentLanguage = 'java';
+
+        async function improveCodeWithAI() {
+            if (!currentSourceCode) {
+                alert('❌ Aucun code source disponible !');
+                return;
+            }
+
+            const btn = document.getElementById('improveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Amélioration en cours...';
+
+            try {
+                const response = await fetch('/ai/improve-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        code: currentSourceCode,
+                        language: currentLanguage
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Afficher le code amélioré dans le modal
+                    document.getElementById('improved-code-content').textContent = data.improved_code;
+                    
+                    // Ouvrir le modal
+                    const modal = new bootstrap.Modal(document.getElementById('improvedCodeModal'));
+                    modal.show();
+                } else {
+                    alert('❌ Erreur: ' + data.error);
+                }
+            } catch (error) {
+                alert('❌ Erreur de connexion: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-magic"></i> ✨ Improve Code with AI';
+            }
+        }
+
+        function copyImprovedCode() {
+            const code = document.getElementById('improved-code-content').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Code copié dans le presse-papier !');
+            }).catch(() => {
+                alert('❌ Erreur lors de la copie');
+            });
+        }

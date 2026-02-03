@@ -1,0 +1,41 @@
+{
+  "score": 84,
+  "issues": [
+    {
+      "severity": "medium",
+      "type": "ConcurrentModificationException Risk",
+      "line": 19,
+      "description": "ArrayList users peut causer des problèmes en environnement concurrent",
+      "code": "private List<User> users = new ArrayList<>();",
+      "recommendation": "Utiliser CopyOnWriteArrayList ou synchroniser l'accès avec Collections.synchronizedList()"
+    },
+    {
+      "severity": "low",
+      "type": "Email Regex Insuffisante",
+      "line": 20,
+      "description": "Pattern d'email simple ne valide pas tous les cas RFC 5322",
+      "code": "Pattern.compile(\"^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$\")",
+      "recommendation": "Utiliser une bibliothèque de validation email (Apache Commons Validator)"
+    },
+    {
+      "severity": "low",
+      "type": "Potential Memory Leak",
+      "line": 38,
+      "description": "La liste users grandit indéfiniment sans limite",
+      "code": "private List<User> users = new ArrayList<>();",
+      "recommendation": "Implémenter une limite max d'utilisateurs ou une pagination"
+    }
+  ],
+  "strengths": [
+    "Utilisation d'Optional pour les valeurs nullables",
+    "Pattern compilé une seule fois (static final)",
+    "Validation des entrées avec IllegalArgumentException",
+    "Classe interne User bien encapsulée"
+  ],
+  "suggestions": [
+    "Rendre users thread-safe avec ConcurrentHashMap<Long, User>",
+    "Utiliser une bibliothèque de validation dédiée",
+    "Ajouter des logs pour les opérations CRUD",
+    "Implémenter une limite de taille pour la liste users"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "score": 82,
+  "issues": [
+    {
+      "severity": "medium",
+      "type": "HTTP Error Handling Missing",
+      "line": 19,
+      "description": "Les erreurs HTTP ne sont pas gérées explicitement",
+      "code": "return this.http.get<User[]>(this.apiUrl);",
+      "recommendation": "Ajouter .pipe(catchError()) pour gérer les erreurs réseau"
+    },
+    {
+      "severity": "low",
+      "type": "Hardcoded URL",
+      "line": 15,
+      "description": "URL de l'API est hardcodée dans le service",
+      "code": "private apiUrl = 'https://api.example.com/users';",
+      "recommendation": "Utiliser une variable d'environnement ou un fichier de configuration"
+    },
+    {
+      "severity": "low",
+      "type": "Email Validation Simplifiée",
+      "line": 45,
+      "description": "La regex d'email est basique et ne couvre pas tous les cas RFC 5322",
+      "code": "const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;",
+      "recommendation": "Utiliser une bibliothèque spécialisée ou une regex plus complète"
+    }
+  ],
+  "strengths": [
+    "Utilisation de TypeScript pour la sécurité des types",
+    "Injection de dépendances avec Angular",
+    "Méthodes CRUD complètes",
+    "Utilisation d'Observables pour la programmation réactive"
+  ],
+  "suggestions": [
+    "Ajouter la gestion d'erreurs avec catchError et retry",
+    "Implémenter un intercepteur HTTP pour les erreurs globales",
+    "Ajouter des logs pour le débogage",
+    "Créer des interfaces séparées pour les DTOs"
+  ]
+}

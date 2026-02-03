@@ -1,0 +1,18 @@
+{
+  "coverage_score": 97,
+  "estimated_coverage": 99,
+  "uncovered_lines": [],
+  "missing_tests": [
+    {
+      "line": 64,
+      "reason": "Pas de test pour factorial avec n = 20 (limite overflow)",
+      "suggested_test": "@Test void testFactorialLargeValue() { assertEquals(2432902008176640000L, calculator.factorial(20)); }"
+    }
+  ],
+  "strengths": [
+    "Couverture complète de toutes les méthodes publiques",
+    "Tests des cas d'erreur avec assertThrows",
+    "Tests des valeurs limites (zéro, négatifs)",
+    "Tests de précision pour les doubles"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "score": 89,
+  "performance_level": "Very Good",
+  "bottlenecks": [
+    {
+      "severity": "medium",
+      "type": "Recursive Algorithm",
+      "line": 47,
+      "description": "factorial() utilise la récursion, moins performant qu'une boucle",
+      "code": "return n * this.factorial(n - 1);",
+      "recommendation": "Remplacer par une boucle for pour améliorer les performances"
+    }
+  ],
+  "metrics": {
+    "time_complexity": "O(n) pour factorial, O(1) pour autres",
+    "space_complexity": "O(n) pour factorial (stack), O(1) pour autres",
+    "recursive_depth": "n"
+  },
+  "strengths": [
+    "Méthodes arithmétiques simples O(1)",
+    "Utilisation de Math.pow() et Math.sqrt() natifs optimisés",
+    "Pas de boucles imbriquées",
+    "Pas d'allocations mémoire importantes"
+  ],
+  "recommendations": [
+    "Convertir factorial() en version itérative",
+    "Ajouter un cache/mémoïsation pour factorial",
+    "Limiter n pour éviter les calculs trop longs"
+  ]
+}

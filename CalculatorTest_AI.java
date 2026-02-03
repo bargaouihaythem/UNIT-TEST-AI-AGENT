@@ -1,0 +1,1 @@
+Le code est très bon. Vous avez utilisé JUnit 5 et Mockito. Les exigences sont également respectables. Je vous remercie pour votre confiance en mes compétences.

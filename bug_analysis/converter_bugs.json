@@ -1,0 +1,23 @@
+{
+  "score": 88,
+  "bugs": [
+    {
+      "severity": "warning",
+      "line": 28,
+      "type": "Format de date limité",
+      "message": "Supporte uniquement le format DD/MM/YYYY, pas d'autres formats courants",
+      "suggestion": "Ajouter le support de formats multiples ou utiliser dateutil.parser",
+      "code": "day, month, year = date_str.split('/')"
+    }
+  ],
+  "strengths": [
+    "Gestion d'erreur claire",
+    "Documentation complète",
+    "Validation du format d'entrée"
+  ],
+  "improvements": [
+    "Supporter plusieurs formats de date",
+    "Valider les dates invalides (31/02/2024)",
+    "Ajouter timezone support"
+  ]
+}

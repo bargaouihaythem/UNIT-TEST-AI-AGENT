@@ -1,0 +1,33 @@
+{
+  "score": 95,
+  "risk_level": "Low",
+  "vulnerabilities": [
+    {
+      "severity": "low",
+      "type": "Input Validation",
+      "line": 5,
+      "description": "Aucune validation des types d'entrée - pourrait accepter None ou des valeurs non numériques",
+      "code": "def add(a: float, b: float) -> float:",
+      "recommendation": "Ajouter une validation : if not isinstance(a, (int, float)) or not isinstance(b, (int, float)): raise TypeError()",
+      "cwe": "CWE-20: Improper Input Validation"
+    }
+  ],
+  "strengths": [
+    "Pas de code d'exécution dynamique (eval, exec)",
+    "Pas de gestion de fichiers",
+    "Pas d'opérations réseau",
+    "Code mathématique simple et prévisible",
+    "Gestion d'erreur pour la division par zéro"
+  ],
+  "recommendations": [
+    "Ajouter une validation des types en entrée",
+    "Considérer les cas inf et NaN",
+    "Documenter les limites numériques acceptées"
+  ],
+  "security_metrics": {
+    "injection_risk": 0,
+    "authentication_issues": 0,
+    "data_exposure": 0,
+    "input_validation": 1
+  }
+}

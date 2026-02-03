@@ -1,0 +1,32 @@
+{
+  "score": 91,
+  "quality_level": "Excellent",
+  "smells": [
+    {
+      "severity": "minor",
+      "type": "Recursive Method",
+      "line": 64,
+      "description": "factorial() est récursif, moins idiomatique en Java",
+      "code": "return n * factorial(n - 1);",
+      "recommendation": "Envisager une version itérative plus standard"
+    }
+  ],
+  "metrics": {
+    "avg_function_length": 5,
+    "max_parameters": 2,
+    "class_cohesion": 0.92
+  },
+  "strengths": [
+    "Classe très cohésive (toutes méthodes mathématiques)",
+    "Javadoc complète et informative",
+    "Méthodes courtes et focalisées",
+    "Noms de méthodes clairs et standards",
+    "Gestion appropriée des exceptions",
+    "Package bien nommé"
+  ],
+  "recommendations": [
+    "Considérer rendre la classe final si pas d'extension prévue",
+    "Ajouter des constantes pour les limites numériques",
+    "Envisager une classe AdvancedMath séparée pour power, sqrt, factorial"
+  ]
+}

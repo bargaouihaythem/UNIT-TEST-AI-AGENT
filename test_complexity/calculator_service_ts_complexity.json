@@ -1,0 +1,29 @@
+{
+  "score": 93,
+  "metrics": {
+    "total_tests": 25,
+    "avg_lines_per_test": 3,
+    "assertions_per_test": 1.2,
+    "cyclomatic_complexity": 1.4,
+    "cognitive_complexity": 1.2,
+    "duplication_percentage": 5
+  },
+  "quality_indicators": {
+    "complexity": "Très simple",
+    "duplication": "Très faible",
+    "maintainability": "Excellente",
+    "readability": "Excellente"
+  },
+  "strengths": [
+    "Tests très compacts et efficaces",
+    "Couverture complète de toutes les méthodes",
+    "Tests d'erreurs (division par zéro, racine carrée négative)",
+    "Utilisation de toBeCloseTo() pour les nombres décimaux"
+  ],
+  "opportunities": [
+    "Grouper les tests similaires avec describe() imbriqués",
+    "Utiliser @pytest.mark.parametrize pour réduire la duplication",
+    "Ajouter des tests avec de très grandes valeurs (limites)",
+    "Tester les cas de précision numérique"
+  ]
+}

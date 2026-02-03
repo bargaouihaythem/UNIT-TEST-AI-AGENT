@@ -1,0 +1,34 @@
+{
+  "score": 87,
+  "complexity": {
+    "cyclomatic": 2.1,
+    "cognitive": 1.8,
+    "maintainability": 89
+  },
+  "metrics": {
+    "total_tests": 19,
+    "avg_lines_per_test": 6,
+    "avg_assertions_per_test": 1.2,
+    "parametrized_tests": 0,
+    "mocks_used": 0,
+    "fixtures_used": 0,
+    "duplication_rate": 8
+  },
+  "strengths": [
+    "Tests simples et compréhensibles",
+    "Bonne couverture des cas d'erreur",
+    "Noms de tests descriptifs et explicites",
+    "Longueur des tests appropriée (6 lignes en moyenne)"
+  ],
+  "opportunities": [
+    "Grouper les tests similaires avec @pytest.mark.parametrize pour réduire la duplication",
+    "Ajouter des fixtures pour la réutilisation des données de test",
+    "Considérer des tests de performance pour les opérations mathématiques"
+  ],
+  "quality_indicators": {
+    "readability": "Excellente",
+    "maintainability": "Très bonne",
+    "complexity": "Simple",
+    "duplication": "Acceptable"
+  }
+}

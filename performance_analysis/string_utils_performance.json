@@ -1,0 +1,40 @@
+{
+  "score": 92,
+  "performance_level": "Very Good",
+  "bottlenecks": [
+    {
+      "severity": "low",
+      "type": "String Operations",
+      "line": 10,
+      "description": "Opérations sur strings peuvent être lentes pour très grandes strings",
+      "code": "return s[::-1]",
+      "impact": "O(n) - linéaire avec la taille de la string",
+      "recommendation": "Pour strings >10MB, considérer un générateur ou traitement par chunks"
+    }
+  ],
+  "metrics": {
+    "time_complexity": "O(n)",
+    "space_complexity": "O(n)",
+    "estimated_execution_time_ms": 0.1,
+    "memory_usage_kb": 2.5
+  },
+  "analysis": {
+    "loops": 0,
+    "nested_loops": 0,
+    "recursive_calls": 0,
+    "io_operations": 0
+  },
+  "strengths": [
+    "Utilisation de slicing Python optimisé",
+    "Pas de boucles manuelles",
+    "Opérations natives très rapides",
+    "Complexity linéaire acceptable pour strings",
+    "Pas d'allocations excessives"
+  ],
+  "recommendations": [
+    "Ajouter une limite de taille pour sécurité",
+    "Performances déjà excellentes pour usage normal",
+    "Considérer bytearray pour très grandes strings"
+  ],
+  "warnings": []
+}

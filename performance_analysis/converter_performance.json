@@ -1,0 +1,41 @@
+{
+  "score": 85,
+  "performance_level": "Good",
+  "bottlenecks": [
+    {
+      "severity": "medium",
+      "type": "Multiple Try-Except Blocks",
+      "line": 12,
+      "description": "Plusieurs blocs try-except peuvent ralentir en cas d'erreurs fréquentes",
+      "code": "for fmt in formats: try: ... except ValueError: continue",
+      "impact": "Chaque exception a un coût de ~1-5ms",
+      "recommendation": "Pré-valider le format avant de tenter la conversion"
+    }
+  ],
+  "metrics": {
+    "time_complexity": "O(n)",
+    "space_complexity": "O(1)",
+    "estimated_execution_time_ms": 2.5,
+    "memory_usage_kb": 3.0
+  },
+  "analysis": {
+    "loops": 1,
+    "nested_loops": 0,
+    "recursive_calls": 0,
+    "io_operations": 0
+  },
+  "strengths": [
+    "Une seule boucle (non imbriquée)",
+    "Utilisation de datetime (bibliothèque C optimisée)",
+    "Early return sur succès",
+    "Pas d'allocations mémoire excessives"
+  ],
+  "recommendations": [
+    "Mettre les formats les plus fréquents en premier",
+    "Considérer un cache des dates déjà converties",
+    "Limiter le nombre de formats testés"
+  ],
+  "warnings": [
+    "Les exceptions sont coûteuses - éviter si possible"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "score": 83,
+  "performance_level": "Good",
+  "bottlenecks": [
+    {
+      "severity": "medium",
+      "type": "HTTP Call Without Caching",
+      "line": 19,
+      "description": "Chaque appel getUsers() fait une requête réseau complète",
+      "code": "return this.http.get<User[]>(this.apiUrl);",
+      "recommendation": "Implémenter un cache avec shareReplay() ou un service de cache"
+    }
+  ],
+  "metrics": {
+    "time_complexity": "O(n)",
+    "space_complexity": "O(n)",
+    "http_calls": 5
+  },
+  "strengths": [
+    "Utilisation d'Observables pour les appels asynchrones",
+    "Pas de boucles imbriquées",
+    "HttpClient optimisé par Angular",
+    "Méthodes simples sans calculs lourds"
+  ],
+  "recommendations": [
+    "Ajouter shareReplay() pour cacher les observables",
+    "Implémenter le lazy loading si liste longue",
+    "Utiliser debounceTime() pour les recherches",
+    "Considérer une pagination côté serveur"
+  ]
+}

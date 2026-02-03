@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🤖 AI Unit Test Generator - Sopra Steria PFA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .hero-section {
+            padding: 40px 0;
+            text-align: center;
+        }
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .upload-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .upload-box { 
+            background: rgba(102, 126, 234, 0.1);
+            padding: 50px; 
+            border: 3px dashed #667eea; 
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-box:hover { 
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+        .upload-icon {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .btn-generate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+        .btn-generate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+            color: white;
+        }
+        .btn-generate:disabled {
+            background: #555;
+            box-shadow: none;
+        }
+        #result { 
+            margin-top: 30px; 
+            padding: 20px; 
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid #28a745;
+            border-radius: 15px; 
+            display: none;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        #result pre {
+            color: #d4edda;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .badge-ai {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa502 100%);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .feature-item {
+            text-align: center;
+            padding: 15px;
+        }
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero-section">
+            <h1 class="hero-title">🤖 AI Unit Test Generator</h1>
+            <p class="text-muted">Générez automatiquement des tests unitaires avec l'IA</p>
+            <span class="badge-ai">⚡ Mode Rapide - Templates Mockito + JUnit</span>
+        </div>
+        
+        <div class="upload-card">
+            <div class="upload-box" id="uploadBox">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <h3>Glissez-déposez votre fichier ici</h3>
+                <p class="text-muted">ou cliquez pour parcourir</p>
+                <p><small>✅ Fichiers acceptés: .py, .ts, .java</small></p>
+                <input type="file" id="fileInput" accept=".py,.ts,.java" style="display: none;">
+                <p id="fileName" style="color: #28a745; font-weight: bold; font-size: 1.2rem;"></p>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button class="btn btn-generate" id="uploadBtn" disabled>
+                    <i class="fas fa-magic"></i> Générer les Tests
+                </button>
+            </div>
+            
+            <div id="result"></div>
+        </div>
+        
+        <div class="features">
+            <div class="feature-item">
+                <div class="feature-icon">☕</div>
+                <div>Java + JUnit 5</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🐍</div>
+                <div>Python + pytest</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📘</div>
+                <div>TypeScript + Jest</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🎭</div>
+                <div>Mockito Mocks</div>
+            </div>
+        </div>
+        
+        <p class="text-center text-muted mt-4">
+            <small>🎓 Projet PFA - Sopra Steria 2026</small>
+        </p>
+    </div>
+    
+    <script>
+        var uploadBox = document.getElementById('uploadBox');
+        var fileInput = document.getElementById('fileInput');
+        var uploadBtn = document.getElementById('uploadBtn');
+        var fileName = document.getElementById('fileName');
+        var result = document.getElementById('result');
+        var selectedFile = null;
+        
+        uploadBox.onclick = function() {
+            fileInput.click();
+        };
+        
+        fileInput.onchange = function(e) {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                fileName.textContent = '✅ ' + selectedFile.name;
+                uploadBtn.disabled = false;
+            }
+        };
+        
+        uploadBtn.onclick = function() {
+            if (!selectedFile) return;
+            
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération...';
+            uploadBtn.disabled = true;
+            
+            var formData = new FormData();
+            formData.append('file', selectedFile);
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                result.style.display = 'block';
+                if (data.success) {
+                    result.style.background = 'rgba(40, 167, 69, 0.2)';
+                    result.style.borderColor = '#28a745';
+                    var html = '<h4 style="color:#28a745;">✅ Tests générés avec succès!</h4>';
+                    html += '<p><strong>Fichier:</strong> ' + data.test_filename + '</p>';
+                    html += '<p><strong>Tests:</strong> ' + data.stats.total + ' tests (' + data.stats.passed + ' passed)</p>';
+                    html += '<hr style="border-color:#444;">';
+                    html += '<h5>📝 Code des tests:</h5>';
+                    html += '<pre style="background:#1e1e1e; padding:15px; border-radius:10px; color:#d4d4d4;">' + escapeHtml(data.test_content) + '</pre>';
+                    result.innerHTML = html;
+                } else {
+                    result.style.background = 'rgba(220, 53, 69, 0.2)';
+                    result.style.borderColor = '#dc3545';
+                    result.innerHTML = '<h4 style="color:#dc3545;">❌ Erreur</h4><p>' + data.error + '</p>';
+                }
+                uploadBtn.innerHTML = '<i class="fas fa-magic"></i> Générer les Tests';
+                uploadBtn.disabled = false;
+            })
+            .catch(function(err) {
+                result.style.display = 'block';
+                result.style.background = 'rgba(220, 53, 69, 0.2)';
+                result.innerHTML = '<h4 style="color:#dc3545;">❌ Erreur réseau</h4><p>' + err.message + '</p>';
+                uploadBtn.innerHTML = '<i class="fas fa-magic"></i> Générer les Tests';
+                uploadBtn.disabled = false;
+            });
+        };
+        
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

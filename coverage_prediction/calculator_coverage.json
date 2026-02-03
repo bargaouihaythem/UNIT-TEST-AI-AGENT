@@ -1,0 +1,33 @@
+{
+  "coverage_score": 95,
+  "estimated_coverage": 98,
+  "lines_covered": 26,
+  "lines_total": 27,
+  "uncovered_lines": [14],
+  "uncovered_branches": [],
+  "analysis": {
+    "functions_tested": 5,
+    "functions_total": 5,
+    "branches_tested": 8,
+    "branches_total": 8
+  },
+  "missing_tests": [
+    {
+      "line": 14,
+      "function": "add",
+      "reason": "Cas limite : addition de très grands nombres (overflow)",
+      "suggested_test": "test_add_large_numbers() pour tester sys.maxsize"
+    }
+  ],
+  "strengths": [
+    "Excellente couverture des cas d'erreur",
+    "Tous les cas nominaux testés",
+    "Division par zéro correctement testée",
+    "Tests pour valeurs négatives présents"
+  ],
+  "recommendations": [
+    "Tester les limites numériques (inf, -inf)",
+    "Ajouter des tests pour NaN",
+    "Tester les très grands nombres"
+  ]
+}

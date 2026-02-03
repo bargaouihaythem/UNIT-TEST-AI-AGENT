@@ -1,0 +1,56 @@
+{
+  "score": 82,
+  "quality_level": "Good",
+  "smells": [
+    {
+      "severity": "medium",
+      "type": "Long Function",
+      "line": 8,
+      "description": "Fonction convert_date_to_iso relativement longue (>20 lignes)",
+      "code": "def convert_date_to_iso(date_string: str) -> str:",
+      "recommendation": "Considérer split en 2 fonctions : _try_parse_format() et convert_date_to_iso()"
+    },
+    {
+      "severity": "minor",
+      "type": "Exception as Control Flow",
+      "line": 16,
+      "description": "Utilisation d'exceptions pour le flux normal (try multiple formats)",
+      "code": "try: ... except ValueError: continue",
+      "recommendation": "Acceptable ici, mais pourrait utiliser une validation pré-emptive"
+    },
+    {
+      "severity": "minor",
+      "type": "Hard-coded List",
+      "line": 12,
+      "description": "Liste de formats hard-codée dans la fonction",
+      "code": "formats = ['%Y-%m-%d', '%d/%m/%Y', ...]",
+      "recommendation": "Extraire en constante : SUPPORTED_DATE_FORMATS = [...]"
+    }
+  ],
+  "metrics": {
+    "avg_function_length": 18.5,
+    "max_parameters": 1,
+    "max_complexity": 4,
+    "comment_ratio": 0.22
+  },
+  "strengths": [
+    "Un seul paramètre",
+    "Nom de fonction clair",
+    "Gestion d'erreur appropriée",
+    "Type hints présents",
+    "Docstring informative"
+  ],
+  "recommendations": [
+    "Extraire la liste de formats en constante",
+    "Réduire la longueur de la fonction",
+    "Ajouter plus de commentaires pour clarifier la logique"
+  ],
+  "detected_issues": {
+    "long_functions": 1,
+    "too_many_parameters": 0,
+    "deep_nesting": 0,
+    "commented_code": 0,
+    "unclear_names": 0,
+    "code_duplication": 0
+  }
+}

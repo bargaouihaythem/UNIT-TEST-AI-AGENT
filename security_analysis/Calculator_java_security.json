@@ -1,0 +1,28 @@
+{
+  "score": 93,
+  "risk_level": "Low",
+  "vulnerabilities": [
+    {
+      "severity": "low",
+      "type": "Integer Overflow",
+      "cwe": "CWE-190",
+      "line": 64,
+      "description": "factorial() peut causer un overflow de long pour n > 20",
+      "code": "return n * factorial(n - 1);",
+      "recommendation": "Limiter n à 20 maximum ou utiliser BigInteger pour grandes valeurs"
+    }
+  ],
+  "strengths": [
+    "Pas d'injection SQL ou de code dynamique",
+    "Validation appropriée des entrées",
+    "Gestion sécurisée des exceptions",
+    "Pas de manipulation de fichiers ou réseau",
+    "Pas de sérialisation dangereuse",
+    "Code stateless et thread-safe"
+  ],
+  "recommendations": [
+    "Ajouter une constante MAX_FACTORIAL_INPUT = 20",
+    "Documenter les limites numériques dans la Javadoc",
+    "Considérer BigInteger pour factorial si n > 20 nécessaire"
+  ]
+}

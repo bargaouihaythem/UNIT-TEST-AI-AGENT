@@ -1,0 +1,18 @@
+{
+  "coverage_score": 96,
+  "estimated_coverage": 99,
+  "uncovered_lines": [],
+  "missing_tests": [
+    {
+      "line": 47,
+      "reason": "Pas de test pour factorial avec de très grandes valeurs (risque overflow)",
+      "suggested_test": "it('should handle large factorial values')"
+    }
+  ],
+  "strengths": [
+    "Couverture exceptionnelle de toutes les méthodes",
+    "Tests pour tous les cas d'erreur",
+    "Tests des valeurs limites (zéro, négatifs)",
+    "Tests des nombres décimaux"
+  ]
+}

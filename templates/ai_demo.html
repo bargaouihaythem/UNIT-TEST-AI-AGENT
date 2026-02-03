@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test IA Ollama</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .status {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .status-indicator.online {
+            background: #28a745;
+            box-shadow: 0 0 10px #28a745;
+        }
+        
+        .status-indicator.offline {
+            background: #dc3545;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .code-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        
+        .output {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 150px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Test IA Ollama - Gratuit</h1>
+            <p>Génération de tests unitaires avec intelligence artificielle locale</p>
+        </div>
+        
+        <div class="status">
+            <span class="status-indicator" id="statusIndicator"></span>
+            <strong>Statut Ollama:</strong> <span id="statusText">Vérification...</span>
+        </div>
+        
+        <div class="content">
+            <!-- Input Panel -->
+            <div class="panel">
+                <h2>📝 Code Source</h2>
+                <textarea class="code-input" id="sourceCode" placeholder="Colle ton code Java ici...">public class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+    
+    public int divide(int a, int b) {
+        return a / b;
+    }
+}</textarea>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="explainCode()">
+                        💡 Explain Code
+                    </button>
+                    <button class="btn btn-danger" onclick="detectBugs()">
+                        🐛 Detect Bugs
+                    </button>
+                    <button class="btn btn-success" onclick="improveTests()">
+                        ✨ Improve Tests
+                    </button>
+                    <button class="btn btn-warning" onclick="findEdgeCases()">
+                        🎯 Edge Cases
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Output Panel -->
+            <div class="panel">
+                <h2>📊 Résultat IA</h2>
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>L'IA analyse votre code...</p>
+                </div>
+                <div class="output" id="output">Les résultats de l'analyse IA apparaîtront ici...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vérifier le statut d'Ollama au chargement
+        async function checkStatus() {
+            try {
+                const response = await fetch('/ai/status');
+                const data = await response.json();
+                
+                const indicator = document.getElementById('statusIndicator');
+                const text = document.getElementById('statusText');
+                
+                if (data.available) {
+                    indicator.className = 'status-indicator online';
+                    text.textContent = `✅ ${data.message} (${data.model})`;
+                } else {
+                    indicator.className = 'status-indicator offline';
+                    text.textContent = `❌ ${data.message}`;
+                }
+            } catch (error) {
+                document.getElementById('statusText').textContent = '❌ Erreur de connexion au serveur';
+            }
+        }
+        
+        // Afficher le chargement
+        function showLoading() {
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('output').style.display = 'none';
+        }
+        
+        // Masquer le chargement
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('output').style.display = 'block';
+        }
+        
+        // Afficher le résultat
+        function displayResult(result) {
+            hideLoading();
+            document.getElementById('output').textContent = result;
+        }
+        
+        // Expliquer le code
+        async function explainCode() {
+            const code = document.getElementById('sourceCode').value;
+            
+            if (!code.trim()) {
+                alert('Veuillez entrer du code d\'abord');
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const response = await fetch('/ai/explain', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code, language: 'java' })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResult(`💡 EXPLICATION DU CODE\n\n${data.explanation}`);
+                } else {
+                    displayResult(`❌ ERREUR\n\n${data.error}`);
+                }
+            } catch (error) {
+                displayResult(`❌ ERREUR DE CONNEXION\n\n${error.message}`);
+            }
+        }
+        
+        // Détecter les bugs
+        async function detectBugs() {
+            const code = document.getElementById('sourceCode').value;
+            
+            if (!code.trim()) {
+                alert('Veuillez entrer du code d\'abord');
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const response = await fetch('/ai/detect-bugs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code, language: 'java' })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResult(`🐛 BUGS DÉTECTÉS\n\n${data.bugs}`);
+                } else {
+                    displayResult(`❌ ERREUR\n\n${data.error}`);
+                }
+            } catch (error) {
+                displayResult(`❌ ERREUR DE CONNEXION\n\n${error.message}`);
+            }
+        }
+        
+        // Améliorer les tests
+        async function improveTests() {
+            const code = document.getElementById('sourceCode').value;
+            
+            if (!code.trim()) {
+                alert('Veuillez entrer du code d\'abord');
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const response = await fetch('/ai/improve-tests', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ test_code: code, language: 'java' })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResult(`✨ AMÉLIORATIONS SUGGÉRÉES\n\n${data.improvements}`);
+                } else {
+                    displayResult(`❌ ERREUR\n\n${data.error}`);
+                }
+            } catch (error) {
+                displayResult(`❌ ERREUR DE CONNEXION\n\n${error.message}`);
+            }
+        }
+        
+        // Trouver les cas limites
+        async function findEdgeCases() {
+            const code = document.getElementById('sourceCode').value;
+            
+            if (!code.trim()) {
+                alert('Veuillez entrer du code d\'abord');
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const response = await fetch('/ai/edge-cases', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code, language: 'java' })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResult(`🎯 CAS LIMITES IDENTIFIÉS\n\n${data.edge_cases}`);
+                } else {
+                    displayResult(`❌ ERREUR\n\n${data.error}`);
+                }
+            } catch (error) {
+                displayResult(`❌ ERREUR DE CONNEXION\n\n${error.message}`);
+            }
+        }
+        
+        // Vérifier le statut au chargement
+        checkStatus();
+        
+        // Vérifier le statut toutes les 10 secondes
+        setInterval(checkStatus, 10000);
+    </script>
+</body>
+</html>

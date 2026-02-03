@@ -1,0 +1,33 @@
+{
+  "score": 88,
+  "risk_level": "Low",
+  "vulnerabilities": [
+    {
+      "severity": "low",
+      "type": "Input Validation",
+      "line": 5,
+      "description": "Aucune validation des entrées None ou types incorrects",
+      "code": "def reverse_string(s: str) -> str:",
+      "recommendation": "Ajouter : if not isinstance(s, str): raise TypeError('Expected string')",
+      "cwe": "CWE-20: Improper Input Validation"
+    }
+  ],
+  "strengths": [
+    "Pas d'opérations dangereuses (eval, exec, compile)",
+    "Pas de gestion de fichiers",
+    "Pas d'opérations réseau",
+    "Code simple et prévisible",
+    "Opérations sur strings immuables"
+  ],
+  "recommendations": [
+    "Valider les types d'entrée",
+    "Ajouter des limites de longueur pour les strings très longues",
+    "Documenter le comportement avec Unicode"
+  ],
+  "security_metrics": {
+    "injection_risk": 0,
+    "authentication_issues": 0,
+    "data_exposure": 0,
+    "input_validation": 1
+  }
+}

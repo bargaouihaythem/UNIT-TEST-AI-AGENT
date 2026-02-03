@@ -1,0 +1,32 @@
+{
+  "coverage_score": 98,
+  "estimated_coverage": 99,
+  "lines_covered": 42,
+  "lines_total": 43,
+  "uncovered_lines": [28],
+  "uncovered_branches": [],
+  "analysis": {
+    "functions_tested": 8,
+    "functions_total": 8,
+    "branches_tested": 16,
+    "branches_total": 16
+  },
+  "missing_tests": [
+    {
+      "line": 28,
+      "function": "to_title_case",
+      "reason": "Cas limite : string avec caractères accentués",
+      "suggested_test": "test_title_case_with_accents() pour tester 'château'"
+    }
+  ],
+  "strengths": [
+    "Couverture exceptionnelle (99%)",
+    "Tous les edge cases testés",
+    "Strings vides correctement testés",
+    "Tests exhaustifs pour chaque fonction"
+  ],
+  "recommendations": [
+    "Ajouter test pour caractères Unicode",
+    "Considérer les performances avec strings longues"
+  ]
+}

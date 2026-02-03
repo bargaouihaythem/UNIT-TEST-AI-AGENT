@@ -1,0 +1,41 @@
+{
+  "score": 78,
+  "performance_level": "Good",
+  "bottlenecks": [
+    {
+      "severity": "medium",
+      "type": "Regex Complexity",
+      "line": 15,
+      "description": "Expression régulière complexe pourrait être lente avec des entrées longues",
+      "code": "pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'",
+      "impact": "Peut prendre >10ms pour des strings très longues",
+      "recommendation": "Valider la longueur avant la regex : if len(email) > 254: return False"
+    }
+  ],
+  "metrics": {
+    "time_complexity": "O(n)",
+    "space_complexity": "O(1)",
+    "estimated_execution_time_ms": 0.5,
+    "memory_usage_kb": 1.2
+  },
+  "analysis": {
+    "loops": 0,
+    "nested_loops": 0,
+    "recursive_calls": 0,
+    "io_operations": 0
+  },
+  "strengths": [
+    "Pas de boucles explicites",
+    "Utilisation de regex optimisée",
+    "Pas d'allocations mémoire importantes",
+    "Validation rapide pour la plupart des cas"
+  ],
+  "recommendations": [
+    "Ajouter un early return pour longueur >254",
+    "Compiler la regex en dehors de la fonction",
+    "Considérer un cache pour emails fréquents"
+  ],
+  "warnings": [
+    "La regex peut être lente avec backtracking sur entrées malicieuses"
+  ]
+}

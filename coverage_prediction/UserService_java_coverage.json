@@ -1,0 +1,23 @@
+{
+  "coverage_score": 91,
+  "estimated_coverage": 96,
+  "uncovered_lines": [],
+  "missing_tests": [
+    {
+      "line": 19,
+      "reason": "Pas de test de concurrence (multi-threading)",
+      "suggested_test": "@Test void testConcurrentCreateUsers() // avec ExecutorService"
+    },
+    {
+      "line": 53,
+      "reason": "Pas de test avec email très long (>254 caractères)",
+      "suggested_test": "@Test void testCreateUserWithVeryLongEmail()"
+    }
+  ],
+  "strengths": [
+    "Tests complets de toutes les méthodes CRUD",
+    "Tests des cas null et empty",
+    "Tests d'Optional avec isPresent()",
+    "Tests de validation d'email"
+  ]
+}

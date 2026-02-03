@@ -1,0 +1,42 @@
+{
+  "score": 96,
+  "quality_level": "Excellent",
+  "smells": [
+    {
+      "severity": "minor",
+      "type": "Magic Numbers",
+      "line": 34,
+      "description": "La valeur 0 pour vérifier la division est un 'magic number' mais acceptable ici",
+      "code": "if b == 0:",
+      "recommendation": "Acceptable dans ce contexte simple"
+    }
+  ],
+  "metrics": {
+    "avg_function_length": 3.2,
+    "max_parameters": 2,
+    "max_complexity": 2,
+    "comment_ratio": 0.35
+  },
+  "strengths": [
+    "Fonctions très courtes (3-5 lignes)",
+    "Noms de fonctions descriptifs",
+    "Paramètres limités (max 2)",
+    "Docstrings présentes partout",
+    "Code très lisible",
+    "Pas de code dupliqué",
+    "Pas de code mort",
+    "Type hints complets"
+  ],
+  "recommendations": [
+    "Code déjà de très haute qualité",
+    "Aucune amélioration majeure nécessaire"
+  ],
+  "detected_issues": {
+    "long_functions": 0,
+    "too_many_parameters": 0,
+    "deep_nesting": 0,
+    "commented_code": 0,
+    "unclear_names": 0,
+    "code_duplication": 0
+  }
+}

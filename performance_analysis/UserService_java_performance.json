@@ -1,0 +1,39 @@
+{
+  "score": 82,
+  "performance_level": "Good",
+  "bottlenecks": [
+    {
+      "severity": "medium",
+      "type": "Linear Search",
+      "line": 45,
+      "description": "findUserById() fait une recherche linéaire O(n) sur la liste",
+      "code": "users.stream().filter(u -> u.getId().equals(id)).findFirst();",
+      "recommendation": "Utiliser HashMap<Long, User> pour recherche O(1)"
+    },
+    {
+      "severity": "low",
+      "type": "List Copy",
+      "line": 38,
+      "description": "getAllUsers() crée une copie complète de la liste",
+      "code": "return new ArrayList<>(users);",
+      "recommendation": "Acceptable pour sécurité, mais considérer pagination si liste grande"
+    }
+  ],
+  "metrics": {
+    "time_complexity": "O(n) pour search, O(1) pour autres",
+    "space_complexity": "O(n)",
+    "iterations": "single pass"
+  },
+  "strengths": [
+    "Utilisation de Stream API moderne",
+    "Pas de boucles imbriquées",
+    "Pattern regex compilé une seule fois (static)",
+    "Retourne des copies pour éviter modification externe"
+  ],
+  "recommendations": [
+    "Remplacer ArrayList par HashMap<Long, User> pour O(1) lookup",
+    "Implémenter pagination pour getAllUsers()",
+    "Ajouter un cache pour les recherches fréquentes",
+    "Considérer indexation par email si recherches fréquentes"
+  ]
+}

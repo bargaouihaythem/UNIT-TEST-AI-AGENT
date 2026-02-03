@@ -1,0 +1,43 @@
+{
+  "score": 94,
+  "quality_level": "Excellent",
+  "smells": [
+    {
+      "severity": "minor",
+      "type": "Similar Functions",
+      "line": 20,
+      "description": "Fonctions to_upper_case et to_lower_case très similaires - potentiel de refactoring",
+      "code": "def to_upper_case(s: str) -> str: return s.upper()",
+      "recommendation": "Acceptable - simplicité > abstraction ici"
+    }
+  ],
+  "metrics": {
+    "avg_function_length": 2.8,
+    "max_parameters": 2,
+    "max_complexity": 1,
+    "comment_ratio": 0.30
+  },
+  "strengths": [
+    "Fonctions ultra-courtes (1-3 lignes)",
+    "Noms très descriptifs",
+    "Paramètres limités",
+    "Aucune complexité cyclomatique",
+    "Code très lisible",
+    "Pas de duplication",
+    "Type hints complets",
+    "Docstrings présentes"
+  ],
+  "recommendations": [
+    "Code de qualité exceptionnelle",
+    "Maintenir ce niveau de simplicité",
+    "Aucune amélioration nécessaire"
+  ],
+  "detected_issues": {
+    "long_functions": 0,
+    "too_many_parameters": 0,
+    "deep_nesting": 0,
+    "commented_code": 0,
+    "unclear_names": 0,
+    "code_duplication": 0
+  }
+}

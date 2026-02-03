@@ -2,7 +2,7 @@
 import os
 
 from dotenv import load_dotenv
-from openai import OpenAI
+import google.generativeai as genai
 
 load_dotenv()
 
@@ -17,14 +17,17 @@ def generate_test_code(prompt: str) -> str:
         str: The generated test code.
     """
 
-    api_key = os.getenv("OPENAI_API_KEY")
-    client = OpenAI(api_key=api_key)
-
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.3,
-        max_tokens=600,
+    api_key = os.getenv("GEMINI_API_KEY")
+    genai.configure(api_key=api_key)
+    
+    model = genai.GenerativeModel('gemini-flash-lite-latest')
+    
+    response = model.generate_content(
+        prompt,
+        generation_config=genai.types.GenerationConfig(
+            temperature=0.3,
+            max_output_tokens=2048,
+        )
     )
 
-    return response.choices[0].message.content
+    return response.text

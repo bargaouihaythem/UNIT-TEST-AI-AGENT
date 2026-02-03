@@ -1,0 +1,34 @@
+{
+  "score": 91,
+  "complexity": {
+    "cyclomatic": 1.9,
+    "cognitive": 1.6,
+    "maintainability": 92
+  },
+  "metrics": {
+    "total_tests": 22,
+    "avg_lines_per_test": 5,
+    "avg_assertions_per_test": 1.4,
+    "parametrized_tests": 0,
+    "mocks_used": 0,
+    "fixtures_used": 0,
+    "duplication_rate": 12
+  },
+  "strengths": [
+    "Tests très compacts et efficaces",
+    "Excellente organisation par fonction",
+    "Validation complète des entrées",
+    "Tests de None bien gérés"
+  ],
+  "opportunities": [
+    "Utiliser @pytest.mark.parametrize pour les tests de validation",
+    "Créer une fixture pour les listes de domaines corporates",
+    "Ajouter des tests avec des données réalistes (vraies adresses email)"
+  ],
+  "quality_indicators": {
+    "readability": "Excellente",
+    "maintainability": "Excellente",
+    "complexity": "Très simple",
+    "duplication": "Modérée"
+  }
+}

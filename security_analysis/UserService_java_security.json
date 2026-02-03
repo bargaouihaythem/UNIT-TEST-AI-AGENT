@@ -1,0 +1,37 @@
+{
+  "score": 79,
+  "risk_level": "Medium",
+  "vulnerabilities": [
+    {
+      "severity": "medium",
+      "type": "Thread Safety Issue",
+      "cwe": "CWE-362",
+      "line": 19,
+      "description": "ArrayList non synchronisée peut causer des race conditions",
+      "code": "private List<User> users = new ArrayList<>();",
+      "recommendation": "Utiliser ConcurrentHashMap ou synchroniser tous les accès"
+    },
+    {
+      "severity": "low",
+      "type": "Insufficient Input Validation",
+      "cwe": "CWE-20",
+      "line": 53,
+      "description": "Pas de validation de la longueur max du nom et email",
+      "code": "public User createUser(String name, String email, String role)",
+      "recommendation": "Ajouter des limites: name < 100 chars, email < 254 chars"
+    }
+  ],
+  "strengths": [
+    "Validation d'email avec Pattern regex",
+    "Utilisation d'Optional pour éviter NullPointerException",
+    "Pas d'injection SQL (pas de DB directe)",
+    "Pas de sérialisation dangereuse",
+    "Encapsulation avec getters (pas de setters publics)"
+  ],
+  "recommendations": [
+    "Rendre la classe thread-safe avec ConcurrentHashMap",
+    "Ajouter des limites de longueur pour name et email",
+    "Valider le format du role (whitelist: admin, user, guest)",
+    "Considérer l'ajout de rate limiting pour createUser()"
+  ]
+}

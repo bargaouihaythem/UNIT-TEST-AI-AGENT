@@ -1,0 +1,32 @@
+{
+  "score": 85,
+  "bugs": [
+    {
+      "severity": "warning",
+      "line": 34,
+      "type": "Division par zéro",
+      "message": "La fonction divide vérifie b == 0, mais cette vérification pourrait être faite avant l'appel",
+      "suggestion": "Ajouter une validation au niveau appelant ou documenter clairement le comportement",
+      "code": "if b == 0:\n    raise ValueError(\"Cannot divide by zero\")"
+    },
+    {
+      "severity": "info",
+      "line": 5,
+      "type": "Type hints incomplets",
+      "message": "Les fonctions ont des type hints pour les paramètres mais certains edge cases (None, NaN) ne sont pas gérés",
+      "suggestion": "Ajouter des vérifications pour les valeurs spéciales (None, inf, NaN)",
+      "code": "def add(a: float, b: float) -> float:"
+    }
+  ],
+  "strengths": [
+    "Docstrings claires et présentes",
+    "Type hints correctement utilisés",
+    "Gestion d'erreur explicite pour la division",
+    "Code simple et lisible"
+  ],
+  "improvements": [
+    "Ajouter validation des types en entrée",
+    "Gérer les cas spéciaux (infinity, NaN)",
+    "Ajouter des exemples dans les docstrings"
+  ]
+}

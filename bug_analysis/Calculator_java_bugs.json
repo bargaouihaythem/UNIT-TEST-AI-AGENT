@@ -1,0 +1,33 @@
+{
+  "score": 90,
+  "issues": [
+    {
+      "severity": "medium",
+      "type": "Stack Overflow Risk",
+      "line": 64,
+      "description": "factorial() utilise la récursion sans limite, risque de stack overflow",
+      "code": "return n * factorial(n - 1);",
+      "recommendation": "Utiliser une approche itérative ou ajouter une limite MAX_FACTORIAL"
+    },
+    {
+      "severity": "low",
+      "type": "Unchecked Type Casting",
+      "line": 33,
+      "description": "Cast (double) peut perdre en précision pour de très grands entiers",
+      "code": "return (double) a / b;",
+      "recommendation": "Documenter la précision attendue ou utiliser BigDecimal pour haute précision"
+    }
+  ],
+  "strengths": [
+    "Gestion appropriée des exceptions (ArithmeticException, IllegalArgumentException)",
+    "Validation des paramètres d'entrée",
+    "Documentation Javadoc complète",
+    "Séparation claire des responsabilités"
+  ],
+  "suggestions": [
+    "Remplacer la récursion de factorial() par une boucle",
+    "Ajouter des constantes pour les limites (MAX_FACTORIAL = 20)",
+    "Considérer BigDecimal pour les divisions nécessitant haute précision",
+    "Ajouter des tests de performance pour grandes valeurs"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "score": 86,
+  "quality_level": "Very Good",
+  "smells": [
+    {
+      "severity": "minor",
+      "type": "God Class",
+      "line": 14,
+      "description": "UserService mélange User model et service logic",
+      "code": "public static class User { ... }",
+      "recommendation": "Extraire User dans son propre fichier User.java"
+    },
+    {
+      "severity": "minor",
+      "type": "Data Structure Choice",
+      "line": 19,
+      "description": "ArrayList n'est pas optimale pour recherches par ID",
+      "code": "private List<User> users = new ArrayList<>();",
+      "recommendation": "Utiliser Map<Long, User> pour accès O(1)"
+    }
+  ],
+  "metrics": {
+    "avg_function_length": 6,
+    "max_parameters": 3,
+    "class_cohesion": 0.88
+  },
+  "strengths": [
+    "Javadoc complète sur toutes les méthodes publiques",
+    "Utilisation d'Optional moderne",
+    "Noms de méthodes clairs et standards",
+    "Bonne encapsulation avec getters",
+    "Package organization appropriée"
+  ],
+  "recommendations": [
+    "Extraire User dans un fichier séparé",
+    "Créer une interface IUserService",
+    "Remplacer ArrayList par HashMap",
+    "Ajouter des Builder pattern pour User si plus de champs"
+  ]
+}

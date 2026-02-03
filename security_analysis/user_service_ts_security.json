@@ -1,0 +1,36 @@
+{
+  "score": 75,
+  "risk_level": "Medium",
+  "vulnerabilities": [
+    {
+      "severity": "medium",
+      "type": "Cross-Site Scripting (XSS)",
+      "cwe": "CWE-79",
+      "line": 0,
+      "description": "Pas de sanitization des données utilisateur avant affichage",
+      "code": "User interface without input sanitization",
+      "recommendation": "Utiliser DomSanitizer d'Angular pour sanitizer les entrées utilisateur"
+    },
+    {
+      "severity": "medium",
+      "type": "Hardcoded Credentials Risk",
+      "cwe": "CWE-798",
+      "line": 15,
+      "description": "URL de l'API exposée dans le code source",
+      "code": "private apiUrl = 'https://api.example.com/users';",
+      "recommendation": "Utiliser environment.ts pour stocker les URLs sensibles"
+    }
+  ],
+  "strengths": [
+    "Utilisation de TypeScript pour la vérification des types",
+    "HttpClient d'Angular prévient les injections SQL",
+    "Pas d'utilisation de eval() ou de code dynamique dangereux",
+    "Validation d'email côté client"
+  ],
+  "recommendations": [
+    "Implémenter une sanitization avec DomSanitizer",
+    "Ajouter un intercepteur pour les tokens d'authentification",
+    "Utiliser HTTPS uniquement (vérifier avec HttpsOnly)",
+    "Implémenter CORS correctement côté serveur"
+  ]
+}

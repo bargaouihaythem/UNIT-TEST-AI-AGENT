@@ -1,0 +1,28 @@
+{
+  "coverage_score": 88,
+  "estimated_coverage": 94,
+  "uncovered_lines": [
+    {
+      "line": 0,
+      "reason": "Erreurs HTTP non testées"
+    }
+  ],
+  "missing_tests": [
+    {
+      "line": 19,
+      "reason": "Pas de test pour les erreurs réseau (timeout, 500)",
+      "suggested_test": "it('should handle network errors gracefully')"
+    },
+    {
+      "line": 27,
+      "reason": "Pas de test pour utilisateur non trouvé (404)",
+      "suggested_test": "it('should handle 404 when user not found')"
+    }
+  ],
+  "strengths": [
+    "Tests complets pour tous les endpoints CRUD",
+    "Vérification des méthodes HTTP",
+    "Tests de validation d'email",
+    "Tests pour isAdmin()"
+  ]
+}

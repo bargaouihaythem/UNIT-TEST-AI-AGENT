@@ -1,0 +1,42 @@
+{
+  "score": 85,
+  "risk_level": "Low",
+  "vulnerabilities": [
+    {
+      "severity": "medium",
+      "type": "Exception Handling",
+      "line": 20,
+      "description": "Les exceptions sont capturées mais pas loggées - pourrait masquer des tentatives d'attaque",
+      "code": "except ValueError: return None",
+      "recommendation": "Logger les erreurs : logging.warning(f'Invalid date format: {date_string}')",
+      "cwe": "CWE-778: Insufficient Logging"
+    },
+    {
+      "severity": "low",
+      "type": "Input Validation",
+      "line": 8,
+      "description": "Pas de validation de la longueur de la string de date",
+      "code": "def convert_date_to_iso(date_string: str) -> str:",
+      "recommendation": "Limiter la longueur : if len(date_string) > 100: raise ValueError('Date string too long')",
+      "cwe": "CWE-20: Improper Input Validation"
+    }
+  ],
+  "strengths": [
+    "Gestion appropriée des exceptions",
+    "Utilisation de datetime (bibliothèque standard)",
+    "Pas d'exécution de code dynamique",
+    "Format de sortie standardisé (ISO)"
+  ],
+  "recommendations": [
+    "Ajouter du logging pour les erreurs",
+    "Valider la longueur des entrées",
+    "Documenter les formats acceptés",
+    "Ajouter une whitelist de formats"
+  ],
+  "security_metrics": {
+    "injection_risk": 0,
+    "authentication_issues": 0,
+    "data_exposure": 0,
+    "input_validation": 2
+  }
+}

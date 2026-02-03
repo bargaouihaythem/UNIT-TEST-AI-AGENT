@@ -1,0 +1,35 @@
+{
+  "score": 94,
+  "complexity": {
+    "cyclomatic": 1.7,
+    "cognitive": 1.5,
+    "maintainability": 95
+  },
+  "metrics": {
+    "total_tests": 32,
+    "avg_lines_per_test": 4,
+    "avg_assertions_per_test": 1.5,
+    "parametrized_tests": 0,
+    "mocks_used": 0,
+    "fixtures_used": 0,
+    "duplication_rate": 6
+  },
+  "strengths": [
+    "Tests extrêmement compacts et lisibles",
+    "Excellente couverture des edge cases",
+    "Très faible duplication",
+    "Organisation parfaite par fonction",
+    "Gestion complète des types None et non-string"
+  ],
+  "opportunities": [
+    "Parfait ! Très peu d'améliorations nécessaires",
+    "Pourrait bénéficier de tests de performance sur de grandes chaînes",
+    "Considérer des tests de charge pour count_words"
+  ],
+  "quality_indicators": {
+    "readability": "Exceptionnelle",
+    "maintainability": "Exceptionnelle",
+    "complexity": "Très simple",
+    "duplication": "Faible"
+  }
+}

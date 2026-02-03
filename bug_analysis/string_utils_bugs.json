@@ -1,0 +1,25 @@
+{
+  "score": 92,
+  "bugs": [
+    {
+      "severity": "info",
+      "line": 45,
+      "type": "Performance",
+      "message": "count_words utilise split() sans limite, peut être lent sur de très grandes chaînes",
+      "suggestion": "Considérer une implémentation plus efficace pour de gros volumes",
+      "code": "return len(text.split())"
+    }
+  ],
+  "strengths": [
+    "Gestion robuste des types (None, non-string)",
+    "Validation des entrées systématique",
+    "Code défensif bien implémenté",
+    "Fonctions courtes et focalisées",
+    "Gestion des edge cases (chaînes vides, None)"
+  ],
+  "improvements": [
+    "Ajouter des logs pour le debugging",
+    "Optimiser count_words pour de gros volumes",
+    "Documenter les comportements avec None"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "score": 88,
+  "performance_level": "Very Good",
+  "bottlenecks": [
+    {
+      "severity": "medium",
+      "type": "Recursive Algorithm",
+      "line": 64,
+      "description": "factorial() utilise la récursion, consomme de la mémoire stack",
+      "code": "return n * factorial(n - 1);",
+      "recommendation": "Remplacer par une boucle for itérative pour O(1) espace"
+    }
+  ],
+  "metrics": {
+    "time_complexity": "O(n) pour factorial, O(1) pour autres",
+    "space_complexity": "O(n) pour factorial (call stack), O(1) pour autres",
+    "recursive_depth": "n"
+  },
+  "strengths": [
+    "Opérations arithmétiques natives très rapides",
+    "Utilisation de Math.pow() et Math.sqrt() optimisés par JVM",
+    "Pas de boucles imbriquées",
+    "Pas d'allocations d'objets inutiles"
+  ],
+  "recommendations": [
+    "Implémenter factorial() de façon itérative",
+    "Ajouter un cache (memoization) pour factorials fréquents",
+    "Considérer une lookup table pour factorial(0-20)"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "score": 78,
+  "bugs": [
+    {
+      "severity": "critical",
+      "line": 18,
+      "type": "Validation d'email insuffisante",
+      "message": "Le regex pour valider l'email est basique et ne couvre pas tous les cas RFC 5322",
+      "suggestion": "Utiliser une bibliothèque spécialisée comme email-validator ou un regex plus complet",
+      "code": "pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'"
+    },
+    {
+      "severity": "warning",
+      "line": 35,
+      "type": "Gestion d'erreur manquante",
+      "message": "extract_domain ne gère pas le cas où l'email est None",
+      "suggestion": "Ajouter une vérification if email is None au début",
+      "code": "def extract_domain(email: str) -> str:"
+    },
+    {
+      "severity": "info",
+      "line": 52,
+      "type": "Liste hardcodée",
+      "message": "La liste des domaines corporate est hardcodée dans le code",
+      "suggestion": "Utiliser un fichier de configuration ou une base de données",
+      "code": "corporate_domains = ['company.com', 'enterprise.com']"
+    }
+  ],
+  "strengths": [
+    "Séparation des responsabilités (validation, extraction, vérification)",
+    "Utilisation de regex pour la validation",
+    "Retours booléens clairs"
+  ],
+  "improvements": [
+    "Utiliser une bibliothèque de validation professionnelle",
+    "Externaliser la configuration",
+    "Ajouter plus de tests pour les edge cases",
+    "Gérer les emails internationaux (IDN)"
+  ]
+}

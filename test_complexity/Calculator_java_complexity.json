@@ -1,0 +1,29 @@
+{
+  "score": 94,
+  "metrics": {
+    "total_tests": 23,
+    "avg_lines_per_test": 4,
+    "assertions_per_test": 1.1,
+    "cyclomatic_complexity": 1.3,
+    "cognitive_complexity": 1.1,
+    "duplication_percentage": 6
+  },
+  "quality_indicators": {
+    "complexity": "Très simple",
+    "duplication": "Très faible",
+    "maintainability": "Excellente",
+    "readability": "Excellente"
+  },
+  "strengths": [
+    "Utilisation de JUnit 5 avec @Test et assertions modernes",
+    "Tests d'exceptions avec assertThrows",
+    "setUp() avec @BeforeEach pour initialisation propre",
+    "Tests de précision avec delta pour les doubles"
+  ],
+  "opportunities": [
+    "Utiliser @ParameterizedTest pour réduire la duplication",
+    "Grouper les tests avec @Nested classes",
+    "Ajouter @DisplayName pour des noms de tests plus descriptifs",
+    "Tester les cas limites numériques (Integer.MAX_VALUE)"
+  ]
+}

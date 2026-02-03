@@ -1,0 +1,48 @@
+{
+  "score": 88,
+  "quality_level": "Very Good",
+  "smells": [
+    {
+      "severity": "minor",
+      "type": "Complex Regex",
+      "line": 15,
+      "description": "Expression régulière complexe difficile à maintenir",
+      "code": "pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'",
+      "recommendation": "Extraire en constante MODULE_LEVEL : EMAIL_PATTERN = r'...'"
+    },
+    {
+      "severity": "minor",
+      "type": "Magic Number",
+      "line": 15,
+      "description": "Nombre magique '{2,}' dans la regex",
+      "code": "[a-zA-Z]{2,}",
+      "recommendation": "Acceptable pour TLD minimum, mais pourrait être documenté"
+    }
+  ],
+  "metrics": {
+    "avg_function_length": 8.5,
+    "max_parameters": 1,
+    "max_complexity": 3,
+    "comment_ratio": 0.25
+  },
+  "strengths": [
+    "Fonction courte et focalisée",
+    "Un seul paramètre",
+    "Nom de fonction clair",
+    "Type hints présents",
+    "Docstring informative"
+  ],
+  "recommendations": [
+    "Extraire la regex en constante",
+    "Ajouter des commentaires sur les parties complexes de la regex",
+    "Considérer split en sous-fonctions"
+  ],
+  "detected_issues": {
+    "long_functions": 0,
+    "too_many_parameters": 0,
+    "deep_nesting": 0,
+    "commented_code": 0,
+    "unclear_names": 0,
+    "code_duplication": 0
+  }
+}

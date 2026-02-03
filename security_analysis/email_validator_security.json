@@ -1,0 +1,42 @@
+{
+  "score": 72,
+  "risk_level": "Medium",
+  "vulnerabilities": [
+    {
+      "severity": "medium",
+      "type": "Regex DoS (ReDoS)",
+      "line": 15,
+      "description": "Expression régulière complexe pourrait causer un déni de service avec des entrées malicieuses",
+      "code": "pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'",
+      "recommendation": "Limiter la longueur de l'email (max 254 caractères) et utiliser un timeout pour la regex",
+      "cwe": "CWE-1333: Inefficient Regular Expression Complexity"
+    },
+    {
+      "severity": "low",
+      "type": "Input Validation",
+      "line": 10,
+      "description": "Pas de validation du type d'entrée avant traitement",
+      "code": "def is_valid_email(email: str) -> bool:",
+      "recommendation": "Vérifier que email est bien une string : if not isinstance(email, str): return False",
+      "cwe": "CWE-20: Improper Input Validation"
+    }
+  ],
+  "strengths": [
+    "Utilisation de regex pour la validation",
+    "Pas d'exécution de code dynamique",
+    "Pas de stockage de données sensibles",
+    "Validation du format email standard"
+  ],
+  "recommendations": [
+    "Ajouter une limite de longueur (254 caractères max)",
+    "Valider le type avant traitement",
+    "Considérer l'utilisation d'une bibliothèque email dédiée",
+    "Ajouter un timeout pour la regex"
+  ],
+  "security_metrics": {
+    "injection_risk": 0,
+    "authentication_issues": 0,
+    "data_exposure": 0,
+    "input_validation": 2
+  }
+}

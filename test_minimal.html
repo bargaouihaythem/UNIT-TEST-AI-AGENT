@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Upload Minimal</title>
+</head>
+<body>
+    <h1>Test Upload Minimal</h1>
+    <input type="file" id="fileInput" accept=".py,.ts,.java">
+    <button id="uploadBtn">Upload</button>
+    <div id="result"></div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const result = document.getElementById('result');
+
+        uploadBtn.addEventListener('click', async () => {
+            const file = fileInput.files[0];
+            if (!file) {
+                result.textContent = 'Aucun fichier sélectionné';
+                return;
+            }
+
+            result.textContent = 'Upload en cours...';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                result.textContent = 'Réponse: ' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent = 'Erreur: ' + error.message;
+            }
+        });
+
+        // Test au chargement
+        console.log('✅ Script chargé');
+        console.log('fileInput:', fileInput);
+        console.log('uploadBtn:', uploadBtn);
+    </script>
+</body>
+</html>
